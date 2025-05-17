@@ -25,7 +25,7 @@ const props = defineProps({
               .find((x) => x.imdbId == item.mediaId)
               .images.filter((x) => x.coverType === 'poster')[0].remoteUrl
           "
-          class="w-16 rounded-box shadow-md"
+          class="w-24 rounded-box shadow-md"
         />
         <div
           v-if="item.users.length === props.users"
@@ -47,7 +47,7 @@ const props = defineProps({
           </div>
         </div>
       </div>
-      <div>
+      <div class="flex flex-col gap-2">
         <div class="text-lg font-semibold">
           {{ props.data.medias.find((x) => x.imdbId == item.mediaId).title }}
         </div>
@@ -69,10 +69,32 @@ const props = defineProps({
             }}
           </span>
         </div>
+        <div class="avatar-group py-2 -space-x-6 md:hidden">
+          <div v-for="user in item.users" :key="user.id" class="avatar">
+            <div class="size-10">
+              <img :src="user.avatar" />
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="avatar-group -space-x-6 h-16">
+      <div class="avatar-group py-2 -space-x-6 hidden md:block">
         <div v-for="user in item.users" :key="user.id" class="avatar">
-          <div class="size-16">
+          <div class="size-14">
+            <img :src="user.avatar" />
+          </div>
+        </div>
+        <div v-for="user in item.users" :key="user.id" class="avatar">
+          <div class="size-14">
+            <img :src="user.avatar" />
+          </div>
+        </div>
+        <div v-for="user in item.users" :key="user.id" class="avatar">
+          <div class="size-14">
+            <img :src="user.avatar" />
+          </div>
+        </div>
+        <div v-for="user in item.users" :key="user.id" class="avatar">
+          <div class="size-14">
             <img :src="user.avatar" />
           </div>
         </div>

@@ -62,7 +62,7 @@ async function sendVote() {
     },
   });
   selection.value = [];
-  showToast('alert alert-success', 'Vote pris en compte')
+  showToast("alert alert-success", "Vote pris en compte");
 }
 
 function showToast(type, message) {

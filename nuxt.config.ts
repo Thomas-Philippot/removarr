@@ -34,7 +34,12 @@ export default defineNuxtConfig({
       },
     },
   },
-  modules: ["@cssninja/nuxt-toaster", "@sidebase/nuxt-auth", "@nuxt/eslint"],
+  modules: [
+    "@cssninja/nuxt-toaster",
+    "@sidebase/nuxt-auth",
+    "@nuxt/eslint",
+    "@vite-pwa/nuxt",
+  ],
   runtimeConfig: {
     baseURL: "/api/auth",
   },

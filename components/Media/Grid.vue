@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import AppToast from "~/components/AppToast.vue";
 const props = defineProps({
   url: {
     type: String,
@@ -34,7 +35,7 @@ const title = {
   tv: "Séries TV",
 };
 
-async function toggleMovieSelection(id: string) {
+async function toggleMediaSelection(id: string) {
   if (selection.value.includes(id)) {
     const index = selection.value.indexOf(id);
     selection.value.splice(index, 1);
@@ -61,6 +62,12 @@ async function sendVote() {
     },
   });
   selection.value = [];
+  showToast('alert alert-success', 'Vote pris en compte')
+}
+
+function showToast(type, message) {
+  const { $nt } = useNuxtApp();
+  $nt.show(() => h(AppToast, { type, message }));
 }
 
 const indeterminate = computed(() => {
@@ -132,7 +139,7 @@ const selectionLabel = computed(() => {
       v-for="media in medias"
       :key="media.id"
       class="relative shadow-sm cursor-pointer transform-gpu transition duration-300 hover:scale-105"
-      @click="toggleMovieSelection(media.imdbId)"
+      @click="toggleMediaSelection(media.imdbId)"
     >
       <figure>
         <img

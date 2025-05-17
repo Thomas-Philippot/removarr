@@ -46,7 +46,7 @@ export default defineNuxtConfig({
       token: {
         type: "",
         headerName: "X-Plex-Token",
-        maxAgeInSeconds: 2592000
+        maxAgeInSeconds: 2592000,
       },
       refresh: {
         isEnabled: false,

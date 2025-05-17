@@ -1,0 +1,29 @@
+@import "tailwindcss";
+@plugin "daisyui" {
+  themes: false;
+}
+
+@plugin "@tailwindcss/typography";
+@plugin "./latte.ts";
+@plugin "./macchiato.ts";
+
+ul.cards-vertical,
+ul.cards-horizontal {
+  @apply grid gap-4;
+}
+
+ul.cards-vertical {
+  grid-template-columns: repeat(auto-fill, minmax(9.375rem, 1fr));
+}
+
+.menu .router-link-exact-active {
+  @apply bg-primary text-base-300 font-semibold;
+}
+
+.dock .router-link-exact-active {
+  @apply dock-active;
+}
+
+#nt-container {
+  @apply toast;
+}

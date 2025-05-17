@@ -1,0 +1,13 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1747487722314,
+      "tag": "0000_happy_blizzard",
+      "breakpoints": true
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "name": "nuxt-app",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "lint": "npm run lint:eslint && npm run lint:prettier",
+    "lint:eslint": "eslint .",
+    "lint:prettier": "prettier . --check",
+    "lint:fix": "eslint . --fix && prettier --write --list-different ."
+  },
+  "dependencies": {
+    "@nuxt/eslint": "^1.4.0",
+    "better-sqlite3": "^11.10.0",
+    "bowser": "^2.11.0",
+    "drizzle-orm": "^0.43.1",
+    "lodash": "^4.17.21",
+    "nuxt": "^3.17.2",
+    "vue-router": "^4.5.1"
+  },
+  "devDependencies": {
+    "@catppuccin/daisyui": "^2.1.1",
+    "@cssninja/nuxt-toaster": "^0.3.12",
+    "@sidebase/nuxt-auth": "^0.10.1",
+    "@tailwindcss/typography": "^0.5.16",
+    "@tailwindcss/vite": "^4.1.6",
+    "@types/better-sqlite3": "^7.6.13",
+    "@vue/typescript-plugin": "^2.2.10",
+    "daisyui": "^5.0.35",
+    "drizzle-kit": "^0.31.1",
+    "eslint": "^9.27.0",
+    "eslint-config-prettier": "^10.1.5",
+    "prettier": "^3.5.3",
+    "tailwindcss": "^4.1.6",
+    "typescript": "^5.8.3",
+    "vite-plugin-eslint2": "^5.0.3"
+  },
+  "overrides": {
+    "vue": "latest"
+  }
+}

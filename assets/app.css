@@ -25,15 +25,11 @@ ul.cards-vertical {
 }
 
 #nt-container {
-  @apply toast z-10;
-  inset-inline-start: calc(0.25rem * 4);
-  inset-inline-end: auto;
-  --toast-x: 0;
-  --toast-y: -6vh;
+  @apply toast;
+  top: calc(0.25rem * 4);
+  bottom: auto;
   @variant sm {
-    inset-inline-start: auto;
-    inset-inline-end: calc(0.25rem * 4);
-    --toast-x: 0;
-    --toast-y: 0;
+    top: auto;
+    bottom: calc(0.25rem * 4);
   }
 }

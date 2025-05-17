@@ -52,7 +52,7 @@ const props = defineProps({
           {{ props.data.medias.find((x) => x.imdbId == item.mediaId).title }}
         </div>
         <progress
-          :class="`progress w-56 ${item.users.length === props.users ? 'progress-success' : ''}`"
+          :class="`progress w-full sm:w-56 ${item.users.length === props.users ? 'progress-success' : ''}`"
           :value="(item.users.length / props.users) * 100"
           max="100"
         />

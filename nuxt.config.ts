@@ -34,11 +34,6 @@ export default defineNuxtConfig({
       },
     },
   },
-  hooks: {
-    "build:done": () => {
-      console.log("this is after build");
-    },
-  },
   modules: ["@cssninja/nuxt-toaster", "@sidebase/nuxt-auth", "@nuxt/eslint"],
   runtimeConfig: {
     baseURL: "/api/auth",
@@ -51,6 +46,7 @@ export default defineNuxtConfig({
       token: {
         type: "",
         headerName: "X-Plex-Token",
+        maxAgeInSeconds: 2592000
       },
       refresh: {
         isEnabled: false,

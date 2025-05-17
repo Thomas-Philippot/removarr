@@ -111,7 +111,7 @@ const selectionLabel = computed(() => {
     </button>
     <div class="fixed bottom-20 right-4 z-10 sm:hidden">
       <button
-        class="btn btn-primary btn-circle btn-xl shadow-xl"
+        :class="`btn btn-primary btn-circle transition-opacity btn-xl shadow-xl ${selection.length > 0 ? 'opacity-100' : 'opacity-0'}`"
         @click="sendVote"
       >
         <svg
@@ -134,7 +134,7 @@ const selectionLabel = computed(() => {
   <ul v-if="status === 'pending'" class="cards-vertical cursor-wait">
     <li v-for="i in 50" :key="i" class="skeleton h-56 w-full" />
   </ul>
-  <ul v-if="status === 'success'" class="cards-vertical">
+  <ul v-if="status === 'success'" class="cards-vertical pb-4">
     <li
       v-for="media in medias"
       :key="media.id"

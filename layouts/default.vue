@@ -38,7 +38,7 @@
           <UserMenu />
         </div>
       </div>
-      <div class="p-4">
+      <div class="p-4 pb-16">
         <slot />
       </div>
     </div>

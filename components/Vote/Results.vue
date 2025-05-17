@@ -83,21 +83,6 @@ const props = defineProps({
             <img :src="user.avatar" />
           </div>
         </div>
-        <div v-for="user in item.users" :key="user.id" class="avatar">
-          <div class="size-14">
-            <img :src="user.avatar" />
-          </div>
-        </div>
-        <div v-for="user in item.users" :key="user.id" class="avatar">
-          <div class="size-14">
-            <img :src="user.avatar" />
-          </div>
-        </div>
-        <div v-for="user in item.users" :key="user.id" class="avatar">
-          <div class="size-14">
-            <img :src="user.avatar" />
-          </div>
-        </div>
       </div>
     </li>
     <li v-if="props.data.results.length === 0" class="list-row items-center">

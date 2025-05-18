@@ -138,7 +138,7 @@ const selectionLabel = computed(() => {
     <li
       v-for="media in medias"
       :key="media.id"
-      class="relative shadow-sm cursor-pointer transform-gpu transition duration-300 hover:scale-105"
+      class="shadow-sm cursor-pointer transform-gpu transition duration-300 hover:scale-105"
       @click="toggleMediaSelection(media.imdbId)"
     >
       <figure>

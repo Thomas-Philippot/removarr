@@ -16,7 +16,7 @@ function closeDrawer() {
     />
     <div class="drawer-content flex flex-col">
       <!-- Navbar -->
-      <div class="navbar bg-base-300 w-full">
+      <div class="navbar fixed z-40 bg-base-300 w-full">
         <div class="flex-none hidden sm:block lg:hidden">
           <label
             for="app-drawer"
@@ -51,7 +51,7 @@ function closeDrawer() {
           <UserMenu />
         </div>
       </div>
-      <div class="p-4 pb-16">
+      <div class="p-4 pt-20 pb-16">
         <slot />
       </div>
     </div>

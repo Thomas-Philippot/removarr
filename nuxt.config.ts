@@ -7,12 +7,12 @@ export default defineNuxtConfig({
       meta: [
         {
           name: "theme-color",
-          content: "#24273a",
+          content: "#181926",
           media: "(prefers-color-scheme: dark)",
         },
         {
           name: "theme-color",
-          content: "#eff1f5",
+          content: "#dce0e8",
           media: "(prefers-color-scheme: light)",
         },
       ],
@@ -87,6 +87,7 @@ export default defineNuxtConfig({
     manifest: {
       name: "Removarr",
       short_name: "removarr",
+      theme_color: "#dce0e8",
       icons: [
         {
           src: "pwa-192x192.png",

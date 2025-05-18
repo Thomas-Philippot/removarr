@@ -16,7 +16,7 @@ function closeDrawer() {
     />
     <div class="drawer-content flex flex-col">
       <!-- Navbar -->
-      <div class="navbar fixed z-40 bg-base-300 w-full">
+      <div class="navbar z-40 sticky top-0 bg-base-300 w-full shadow-md">
         <div class="flex-none hidden sm:block lg:hidden">
           <label
             for="app-drawer"
@@ -51,7 +51,7 @@ function closeDrawer() {
           <UserMenu />
         </div>
       </div>
-      <div class="p-4 pt-20 pb-16">
+      <div class="p-4 pb-16">
         <slot />
       </div>
     </div>
@@ -130,7 +130,8 @@ function closeDrawer() {
         <span class="dock-label">Séries TV</span>
       </NuxtLink>
     </div>
-    <div class="drawer-side" @click="closeDrawer">
+    <div class="drawer-side z-50" @click="closeDrawer">
+      <label for="my-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
       <ul class="menu menu-lg gap-2 bg-base-200 min-h-full w-80 p-4">
         <!-- Sidebar content here -->
         <li><NuxtLink to="/">Votes</NuxtLink></li>

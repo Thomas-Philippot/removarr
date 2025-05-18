@@ -21,7 +21,7 @@ const props = defineProps({
               .find((x) => x.imdbId == item.mediaId)
               .images.filter((x) => x.coverType === 'poster')[0].remoteUrl
           "
-          class="w-24 rounded-box shadow-md"
+          class="w-18 sm:w-20 md:w-24 rounded-box shadow-md"
         />
         <div
           v-if="item.users.length === props.data.users"
@@ -44,7 +44,7 @@ const props = defineProps({
         </div>
       </div>
       <div class="flex flex-col gap-2">
-        <div class="text-lg font-semibold">
+        <div class="text-sm md:text-xl md:mb-2 font-semibold">
           {{ props.data.medias.find((x) => x.imdbId == item.mediaId).title }}
         </div>
         <progress
@@ -65,9 +65,9 @@ const props = defineProps({
             }}
           </span>
         </div>
-        <div class="avatar-group py-2 -space-x-6 md:hidden">
+        <div class="avatar-group -space-x-3 md:hidden">
           <div v-for="user in item.users" :key="user.id" class="avatar">
-            <div class="size-10">
+            <div class="size-5 sm:size-8 md:size-12">
               <img :src="user.avatar" />
             </div>
           </div>

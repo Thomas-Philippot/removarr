@@ -1,9 +1,5 @@
 <script setup lang="ts">
 const props = defineProps({
-  users: {
-    type: Number,
-    required: true,
-  },
   data: {
     type: Object,
     required: true,
@@ -28,7 +24,7 @@ const props = defineProps({
           class="w-24 rounded-box shadow-md"
         />
         <div
-          v-if="item.users.length === props.users"
+          v-if="item.users.length === props.data.users"
           class="absolute inset-0 flex items-center justify-center"
         >
           <div class="text-success">
@@ -52,12 +48,12 @@ const props = defineProps({
           {{ props.data.medias.find((x) => x.imdbId == item.mediaId).title }}
         </div>
         <progress
-          :class="`progress w-full sm:w-56 ${item.users.length === props.users ? 'progress-success' : ''}`"
-          :value="(item.users.length / props.users) * 100"
+          :class="`progress w-full sm:w-56 ${item.users.length === props.data.users ? 'progress-success' : ''}`"
+          :value="(item.users.length / props.data.users) * 100"
           max="100"
         />
         <div class="text-xs uppercase font-semibold opacity-60">
-          <span v-if="item.users.length === props.users">
+          <span v-if="item.users.length === props.data.users">
             Peut être supprimer
           </span>
           <span v-else>

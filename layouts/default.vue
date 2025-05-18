@@ -1,12 +1,23 @@
+<script setup lang="ts">
+
+const drawer = ref(false)
+
+function closeDrawer() {
+  drawer.value = false
+}
+
+</script>
+
+
 <template>
   <div class="drawer">
-    <input id="my-drawer-3" type="checkbox" class="drawer-toggle" />
+    <input v-model="drawer" id="app-drawer" type="checkbox" class="drawer-toggle" />
     <div class="drawer-content flex flex-col">
       <!-- Navbar -->
       <div class="navbar bg-base-300 w-full">
         <div class="flex-none hidden sm:block lg:hidden">
           <label
-            for="my-drawer-3"
+            for="app-drawer"
             aria-label="open sidebar"
             class="btn btn-square btn-ghost"
           >
@@ -117,13 +128,8 @@
         <span class="dock-label">Séries TV</span>
       </NuxtLink>
     </div>
-    <div class="drawer-side">
-      <label
-        for="my-drawer-3"
-        aria-label="close sidebar"
-        class="drawer-overlay"
-      ></label>
-      <ul class="menu bg-base-200 min-h-full w-80 p-4">
+    <div class="drawer-side" @click="closeDrawer">
+      <ul class="menu menu-lg gap-2 bg-base-200 min-h-full w-80 p-4">
         <!-- Sidebar content here -->
         <li><NuxtLink to="/">Votes</NuxtLink></li>
         <li><NuxtLink to="/movies">Films</NuxtLink></li>

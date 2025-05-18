@@ -89,8 +89,8 @@ async function ping() {
         >
           <p class="text-2xl font-bold">Tout est prêt</p>
           <img
-            src="/assets/face.svg"
-            alt="smiling face with hearths"
+            src="/assets/party.webp"
+            alt="party icon"
             class="h-56"
           />
         </div>

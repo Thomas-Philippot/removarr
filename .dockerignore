@@ -18,6 +18,7 @@ logs
 .fleet
 .idea
 .git
+.github
 
 .gitignore
 README.md

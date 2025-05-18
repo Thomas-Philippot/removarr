@@ -7,12 +7,12 @@ export default defineNuxtConfig({
       meta: [
         {
           name: "theme-color",
-          content: "#eff1f5",
+          content: "#24273a",
           media: "(prefers-color-scheme: dark)",
         },
         {
           name: "theme-color",
-          content: "#24273a",
+          content: "#eff1f5",
           media: "(prefers-color-scheme: light)",
         },
       ],

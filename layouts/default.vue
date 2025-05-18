@@ -131,7 +131,11 @@ function closeDrawer() {
       </NuxtLink>
     </div>
     <div class="drawer-side z-50" @click="closeDrawer">
-      <label for="my-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
+      <label
+        for="my-drawer"
+        aria-label="close sidebar"
+        class="drawer-overlay"
+      ></label>
       <ul class="menu menu-lg gap-2 bg-base-200 min-h-full w-80 p-4">
         <!-- Sidebar content here -->
         <li><NuxtLink to="/">Votes</NuxtLink></li>

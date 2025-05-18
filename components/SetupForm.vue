@@ -88,11 +88,7 @@ async function ping() {
           class="flex flex-col items-center justify-center gap-6 py-4"
         >
           <p class="text-2xl font-bold">Tout est prêt</p>
-          <img
-            src="/assets/party.webp"
-            alt="party icon"
-            class="h-56"
-          />
+          <img src="/assets/party.webp" alt="party icon" class="h-56" />
         </div>
         <div class="flex justify-between">
           <div>

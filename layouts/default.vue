@@ -1,17 +1,19 @@
 <script setup lang="ts">
-
-const drawer = ref(false)
+const drawer = ref(false);
 
 function closeDrawer() {
-  drawer.value = false
+  drawer.value = false;
 }
-
 </script>
-
 
 <template>
   <div class="drawer">
-    <input v-model="drawer" id="app-drawer" type="checkbox" class="drawer-toggle" />
+    <input
+      id="app-drawer"
+      v-model="drawer"
+      type="checkbox"
+      class="drawer-toggle"
+    />
     <div class="drawer-content flex flex-col">
       <!-- Navbar -->
       <div class="navbar bg-base-300 w-full">

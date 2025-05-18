@@ -69,54 +69,54 @@ export default defineNuxtConfig({
   },
   pwa: {
     manifest: {
-      name: 'Removarr',
-      short_name: 'removarr',
+      name: "Removarr",
+      short_name: "removarr",
       icons: [
         {
-          src: 'pwa-192x192.png',
-          sizes: '192x192',
-          type: 'image/png',
+          src: "pwa-192x192.png",
+          sizes: "192x192",
+          type: "image/png",
         },
         {
-          src: 'pwa-512x512.png',
-          sizes: '512x512',
-          type: 'image/png',
+          src: "pwa-512x512.png",
+          sizes: "512x512",
+          type: "image/png",
         },
         {
-          src: 'pwa-512x512.png',
-          sizes: '512x512',
-          type: 'image/png',
-          purpose: 'any maskable',
+          src: "pwa-512x512.png",
+          sizes: "512x512",
+          type: "image/png",
+          purpose: "any maskable",
         },
       ],
     },
     workbox: {
-      globPatterns: ['**/*.{js,css,html,png,svg,ico}'],
-      runtimeCaching:[
+      globPatterns: ["**/*.{js,css,html,png,svg,ico}"],
+      runtimeCaching: [
         {
           urlPattern: /^https:\/\/image\.tmdb\.org\/.*/i,
-          handler: 'CacheFirst',
+          handler: "CacheFirst",
           options: {
-            cacheName: 'tmdb',
+            cacheName: "tmdb",
             cacheableResponse: {
-              statuses: [0, 200]
-            }
-          }
+              statuses: [0, 200],
+            },
+          },
         },
         {
           urlPattern: /^https:\/\/artworks\.thetvdb\.com\/.*/i,
-          handler: 'CacheFirst',
+          handler: "CacheFirst",
           options: {
-            cacheName: 'thetvdb',
+            cacheName: "thetvdb",
             cacheableResponse: {
-              statuses: [0, 200]
-            }
-          }
-        }
-      ]
+              statuses: [0, 200],
+            },
+          },
+        },
+      ],
     },
     injectManifest: {
-      globPatterns: ['**/*.{js,css,html,png,svg,ico}'],
+      globPatterns: ["**/*.{js,css,html,png,svg,ico}"],
     },
     client: {
       installPrompt: true,
@@ -127,9 +127,9 @@ export default defineNuxtConfig({
     devOptions: {
       enabled: true,
       suppressWarnings: true,
-      navigateFallback: '/',
+      navigateFallback: "/",
       navigateFallbackAllowlist: [/^\/$/],
-      type: 'module',
+      type: "module",
     },
   },
   css: ["~/assets/app.css"],

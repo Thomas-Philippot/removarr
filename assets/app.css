@@ -8,7 +8,6 @@
 @plugin "./latte.ts";
 @plugin "./macchiato.ts";
 
-
 ul.cards-vertical,
 ul.cards-horizontal {
   @apply grid gap-4;
@@ -19,7 +18,7 @@ ul.cards-vertical {
 }
 
 .nuxt-loading-indicator {
-  @apply bg-primary
+  @apply bg-primary;
 }
 
 .menu .router-link-exact-active {

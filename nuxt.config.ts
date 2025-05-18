@@ -2,6 +2,22 @@
 import tailwindcss from "@tailwindcss/vite";
 
 export default defineNuxtConfig({
+  app: {
+    head: {
+      meta: [
+        {
+          name: "theme-color",
+          content: "#eff1f5",
+          media: "(prefers-color-scheme: dark)",
+        },
+        {
+          name: "theme-color",
+          content: "#24273a",
+          media: "(prefers-color-scheme: light)",
+        },
+      ],
+    },
+  },
   compatibilityDate: "2024-11-01",
   devtools: { enabled: true },
   eslint: {

@@ -141,7 +141,7 @@ const selectionLabel = computed(() => {
       class="shadow-sm cursor-pointer transform-gpu transition duration-300 hover:scale-105"
       @click="toggleMediaSelection(media.imdbId)"
     >
-      <figure>
+      <figure class="relative">
         <img
           :src="
             media.images.filter((x) => x.coverType === 'poster')[0].remoteUrl

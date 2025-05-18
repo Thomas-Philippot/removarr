@@ -30,7 +30,7 @@ ul.cards-vertical {
 }
 
 #nt-container {
-  @apply toast;
+  @apply toast z-50;
   top: calc(0.25rem * 4);
   bottom: auto;
   @variant sm {

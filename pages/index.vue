@@ -3,8 +3,6 @@ definePageMeta({
   middleware: ["setup", "sidebase-auth"],
 });
 
-const { data: users, status: userStatus } = useFetch("/api/users");
-
 const {
   data,
   status: mediaStatus,
@@ -12,12 +10,13 @@ const {
 } = await useAsyncData(
   "medias",
   async () => {
-    const [results, movies, shows] = await Promise.all([
+    const [results, movies, shows, users] = await Promise.all([
       $fetch("/api/votes/results"),
       $fetch("/radarr/api/v3/movie"),
       $fetch("/sonarr/api/v3/series"),
+      $fetch("/api/users"),
     ]);
-    return { results, medias: [...movies, ...shows] };
+    return { results, medias: [...movies, ...shows], users: users.length };
   },
   { lazy: true },
 );
@@ -32,8 +31,8 @@ const {
   <div v-if="error">
     <ErrorAlert />
   </div>
-  <div v-else-if="userStatus === 'success' && mediaStatus === 'success'">
-    <VoteResults :data="data" :users="users.length" />
+  <div v-else-if="mediaStatus === 'success'">
+    <VoteResults :data="data" />
   </div>
   <div v-else>
     <VoteResultsLoader />

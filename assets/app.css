@@ -1,6 +1,7 @@
 @import "tailwindcss";
 @plugin "daisyui" {
   themes: false;
+  exclude: rootscrollgutter;
 }
 
 @plugin "@tailwindcss/typography";
@@ -14,6 +15,10 @@ ul.cards-horizontal {
 
 ul.cards-vertical {
   grid-template-columns: repeat(auto-fill, minmax(9.375rem, 1fr));
+}
+
+.nuxt-loading-indicator {
+  @apply bg-primary;
 }
 
 .menu .router-link-exact-active {

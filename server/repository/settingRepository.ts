@@ -16,7 +16,20 @@ export interface DVRSettings {
   apiKey: string | null;
 }
 
+export interface PlexSettings {
+  libraries: PlexLibrary[];
+  api_uuid: string | null;
+}
+
+export interface PlexLibrary {
+  id: string;
+  name: string;
+  enabled: boolean;
+  type: string;
+}
+
 export interface MainSettings {
+  plex: PlexSettings;
   radarr: DVRSettings;
   sonarr: DVRSettings;
   overseerr: DVRSettings;
@@ -27,6 +40,10 @@ class Settings {
 
   constructor(initialSettings?: MainSettings) {
     this.data = {
+      plex: {
+        libraries: [],
+        api_uuid: null,
+      },
       radarr: {
         hostname: null,
         port: 7878,

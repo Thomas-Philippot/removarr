@@ -1,11 +1,11 @@
 import { getSettings } from "~/server/repository/settingRepository";
-import merge from "lodash/merge";
+import merge from "lodash/merge.js";
 
 export default defineEventHandler(async (event) => {
   const settings = getSettings().load();
   const data = await readBody(event);
 
-  settings.main = merge(settings.main, data);
+  settings.main.plex = merge(settings.main.plex, data);
   settings.save();
-  return settings.main;
+  return settings.main.plex;
 });

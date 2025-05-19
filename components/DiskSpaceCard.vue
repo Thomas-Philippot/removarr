@@ -36,7 +36,7 @@ function getStatusColor(item: DiskSpaceItem) {
   <div class="pb-6">
     <div class="flex items-center">
       <div class="prose mb-4">
-        <h1>Information Serveur</h1>
+        <h1>Stockage</h1>
       </div>
     </div>
     <div v-if="status === 'success'">
@@ -51,7 +51,7 @@ function getStatusColor(item: DiskSpaceItem) {
             />
             <div class="flex-none">{{ formatBytes(item.totalSpace) }}</div>
           </div>
-          <div class="text-sm">{{ formatBytes(item.freeSpace) }} libre }}</div>
+          <div class="text-sm">{{ formatBytes(item.freeSpace) }} libre</div>
         </div>
       </div>
     </div>

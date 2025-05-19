@@ -1,7 +1,7 @@
 import {
   getSettings,
   type MainSettings,
-} from "../../../repository/settingRepository";
+} from "~/server/repository/settingRepository";
 
 export default defineEventHandler(async (event) => {
   const settings = getSettings().load();

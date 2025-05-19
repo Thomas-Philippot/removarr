@@ -15,9 +15,15 @@ const { data: medias, status } = await useAsyncData(
   props.mediaType,
   async () => {
     const data = await $fetch(props.url);
-    const result = data.filter((x) =>
-      x.rootFolderPath.startsWith("/data/media/shared"),
-    );
+    const plexSettings = await $fetch(`/api/settings/plex`);
+    const filteredPath = plexSettings.libraries
+      .filter((x) => x.type === props.mediaType && x.enabled)
+      .map((x) => x.path);
+
+    const result = data.filter((media) => {
+      return filteredPath.some((path) => path.includes(media.rootFolderPath));
+    });
+
     if (props.mediaType === "movie") {
       return result.filter((x) => x.hasFile);
     }
@@ -32,7 +38,7 @@ const selectAll = ref(false);
 const selection = ref([]);
 const title = {
   movie: "Films",
-  tv: "Séries TV",
+  show: "Séries TV",
 };
 
 async function toggleMediaSelection(id: string) {
@@ -147,7 +153,7 @@ const selectionLabel = computed(() => {
             media.images.filter((x) => x.coverType === 'poster')[0].remoteUrl
           "
           class="rounded-md"
-          alt="Shoes"
+          :alt="`${media.title}`"
         />
         <div
           v-if="selection.includes(media.imdbId)"

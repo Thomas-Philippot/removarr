@@ -39,12 +39,12 @@ async function ping() {
 </script>
 
 <template>
-  <div v-if="settings">
-    <div class="flex gap-4 my-4">
-      <div class="card bg-base-200 w-96 ring-1">
+  <div v-if="settings" class="w-full sm:w-auto">
+    <div class="flex gap-4 my-4 shrink">
+      <div class="card bg-base-200 w-full md:w-80 ring-1">
         <div class="card-body">
           <h2 class="card-title">{{ props.servarr }}</h2>
-          <p class="text-sm">
+          <p class="text-sm truncate">
             <span class="mr-2 font-bold">Adresse</span>
             {{ settings.hostname }}
           </p>

@@ -112,7 +112,7 @@ function closeDrawer() {
         <span class="dock-label">Films</span>
       </NuxtLink>
 
-      <NuxtLink to="/pages/shows" as="button">
+      <NuxtLink to="/shows" as="button">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -140,7 +140,7 @@ function closeDrawer() {
         <!-- Sidebar content here -->
         <li><NuxtLink to="/">Votes</NuxtLink></li>
         <li><NuxtLink to="/movies">Films</NuxtLink></li>
-        <li><NuxtLink to="/pages/shows">Séries TV</NuxtLink></li>
+        <li><NuxtLink to="/shows">Séries TV</NuxtLink></li>
       </ul>
     </div>
   </div>

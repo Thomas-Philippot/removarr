@@ -10,7 +10,7 @@ async function saveSettings() {
 </script>
 
 <template>
-  <div v-if="status === 'success'" class="flex flex-wrap gap-4 pt-2 pb-6">
+  <div v-if="plexSettings && status === 'success'" class="flex flex-wrap gap-4 pt-2 pb-6">
     <div
       v-for="item in plexSettings.libraries"
       :key="item.id"

@@ -1,12 +1,42 @@
+import { getSettings, type PlexLibrary } from "~/server/repository/settingRepository";
 import PlexApi from "plex-api";
-import { getSettings } from "~/server/repository/settingRepository";
 
-export interface Library {
-  id: string;
-  name: string;
-  enabled: boolean;
-  type: "show" | "movie";
-  lastScan?: number;
+export interface PlexResponse {
+  MediaContainer: {
+    size: number
+    allowSync: boolean
+    title1: string
+    Directory: PlexLibraryResponse[]
+  }
+}
+
+interface PlexLibraryResponse {
+  allowSync: boolean;
+  art: string;
+  composite: string;
+  filters: boolean;
+  refreshing: boolean;
+  thumb: string;
+  key: string;
+  type: string;
+  title: string;
+  agent: string;
+  scanner: string;
+  language: string;
+  uuid: string;
+  updatedAt: number;
+  createdAt: number;
+  scannedAt: number;
+  content: boolean;
+  directory: boolean;
+  contentChangedAt: number;
+  hidden: number;
+  Location: PlexLocationResponse[]
+}
+
+interface PlexLocationResponse {
+  id: number;
+  path: string;
 }
 
 export default defineEventHandler(async (event) => {
@@ -19,7 +49,7 @@ export default defineEventHandler(async (event) => {
     https: false,
     token,
     authenticator: {
-      authenticate: (_plexApi, cb: (err?: string, token?: string) => void) => {
+      authenticate: (_plexApi: PlexApi, cb: (err?: string, token?: string) => void) => {
         if (!token) {
           return cb("Plex Token not found!");
         }
@@ -38,7 +68,7 @@ export default defineEventHandler(async (event) => {
   });
 
   try {
-    const response = await client.query("/library/sections");
+    const response: PlexResponse = await client.query("/library/sections");
     const libraries = response.MediaContainer.Directory;
 
     settings.main.plex.libraries = libraries
@@ -57,7 +87,7 @@ export default defineEventHandler(async (event) => {
           enabled: existing?.enabled ?? true,
           type: library.type,
           path: library.Location[0].path,
-        };
+        } as PlexLibrary
       });
     settings.save();
   } catch (error) {

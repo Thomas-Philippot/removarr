@@ -8,7 +8,7 @@ const { data: users, status } = useFetch("/api/users");
       <h1>Utilisateurs</h1>
     </div>
   </div>
-  <div v-if="status === 'success'">
+  <div v-if="users && status === 'success'">
     <UserList :users="users" />
   </div>
 </template>

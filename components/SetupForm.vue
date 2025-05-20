@@ -3,11 +3,19 @@ import AppToast from "~/components/AppToast.vue";
 
 const { data: settings } = useFetch("/api/settings");
 
-const currentServarr = ["radarr", "sonarr"];
+enum ServarrType {
+  Radarr = 'radarr',
+  Sonarr = 'sonarr',
+}
+
+const currentServarr: ServarrType[] = [ServarrType.Radarr, ServarrType.Sonarr];
 
 const step = ref(0);
 
 async function nextStep() {
+  if (!settings.value) {
+    return
+  }
   const currentSetting = settings.value[currentServarr[step.value]];
   if (!currentSetting.hostname || !currentSetting.apiKey) {
     return;
@@ -19,7 +27,7 @@ async function nextStep() {
   step.value++;
 }
 
-function showToast(type, message) {
+function showToast(type: string, message: string) {
   const { $nt } = useNuxtApp();
   $nt.show(() => h(AppToast, { type, message }));
 }
@@ -38,7 +46,7 @@ async function ping() {
     <div
       class="bg-base-200 rounded-box mx-6 lg:mx-0 w-full md:w-2/3 2xl:w-1/3 px-6 py-8"
     >
-      <div class="flex flex-col gap-6">
+      <div v-if="settings" class="flex flex-col gap-6">
         <ul class="steps pt-2">
           <li :class="`step ${step >= 0 ? 'step-primary' : ''}`">
             <span class="step-icon">🍿</span>Step 1

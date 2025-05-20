@@ -1,13 +1,13 @@
 import {
   getSettings,
-  type MainSettings,
+  type DVRSettings
 } from "~/server/repository/settingRepository";
 
 export default defineEventHandler(async (event) => {
   const settings = getSettings().load();
   const key = event.context.params?.servarr;
-  if (key && key in settings.main) {
-    return settings.main[key as keyof MainSettings];
+  if (key === 'radarr' || key === 'sonarr' || key === 'overseerr') {
+    return settings.main[key] as DVRSettings;
   }
   throw createError({
     statusCode: 400,

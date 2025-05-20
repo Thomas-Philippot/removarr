@@ -15,8 +15,8 @@ export const user = sqliteTable("user", {
 export const vote = sqliteTable(
   "vote",
   {
-    mediaId: text("media_id"),
-    userId: text("user_id"),
+    mediaId: text("media_id").notNull(),
+    userId: text("user_id").notNull(),
     mediaType: text("media_type"),
   },
   (table) => [primaryKey({ columns: [table.mediaId, table.userId] })],

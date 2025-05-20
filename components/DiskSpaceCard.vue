@@ -6,9 +6,9 @@ interface DiskSpaceItem {
   totalSpace: number;
 }
 
-const { data, status } = useFetch<DiskSpaceItem[]>("/radarr/api/v3/diskspace");
+const { data, status, error } = useFetch<DiskSpaceItem[]>("/radarr/api/v3/diskspace");
 
-function formatBytes(bytes, decimals = 2) {
+function formatBytes(bytes: number, decimals = 2) {
   if (!+bytes) return "0 Bytes";
 
   const k = 1024;
@@ -37,6 +37,23 @@ function getStatusColor(item: DiskSpaceItem) {
     <div class="flex items-center">
       <div class="prose mb-4">
         <h1>Stockage</h1>
+      </div>
+    </div>
+    <div v-if="error">
+      Erreur : impossible d'afficher les information de stockage
+    </div>
+    <div v-if="status === 'pending'">
+      <div class="flex flex-col gap-4">
+        <div v-for="x in 4" :key="x" class="flex flex-col gap-2">
+          <div class="skeleton h-4 w-14" />
+          <div class="flex gap-4 items-center justify-between">
+            <div class="skeleton h-4 w-full" />
+            <div class="flex-none">
+              <div class="skeleton h-4 w-16" />
+            </div>
+          </div>
+          <div class="skeleton h-2 w-8" />
+        </div>
       </div>
     </div>
     <div v-if="status === 'success'">

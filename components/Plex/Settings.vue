@@ -14,7 +14,7 @@ async function saveSettings() {
     <div
       v-for="item in plexSettings.libraries"
       :key="item.id"
-      class="card bg-secondary card-md shadow-sm"
+      class="card bg-secondary card-md shadow-sm w-full md:w-auto"
     >
       <div class="card-body">
         <h2 class="card-title flex items-center justify-between">
@@ -25,11 +25,13 @@ async function saveSettings() {
             class="toggle toggle-accent"
           />
         </h2>
-        <p>{{ item.path }}</p>
+        <p class="truncate">{{ item.path }}</p>
       </div>
     </div>
   </div>
-  <button class="btn btn-primary" @click="saveSettings">Sauvegarder</button>
+  <div class="flex justify-end md:justify-start">
+    <button class="btn btn-primary" @click="saveSettings">Sauvegarder</button>
+  </div>
 </template>
 
 <style></style>

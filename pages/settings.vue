@@ -14,7 +14,7 @@
     <h1>Plex</h1>
     <p>Régler les paramètres de plex</p>
   </div>
-  <div>
+  <div class="mb-6">
     <PlexSettings />
   </div>
 </template>

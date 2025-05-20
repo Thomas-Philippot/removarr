@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import AppToast from "~/components/AppToast.vue";
+import type { DVRSettings } from "~/server/repository/settingRepository";
 
 const props = defineProps({
   servarr: {
@@ -8,11 +9,11 @@ const props = defineProps({
   },
 });
 
-const { data: settings } = useFetch(`/api/settings/${props.servarr}`);
+const { data: settings } = useFetch<DVRSettings>(`/api/settings/${props.servarr}`);
 
 function openModal() {
   const modal = document.getElementById(`${props.servarr}_modal`);
-  modal.showModal();
+  modal?.showModal();
 }
 
 async function postData() {
@@ -21,10 +22,10 @@ async function postData() {
     body: settings.value,
   });
   const modal = document.getElementById(`${props.servarr}_modal`);
-  modal.close();
+  modal?.close();
 }
 
-function showToast(type, message) {
+function showToast(type: string, message: string) {
   const { $nt } = useNuxtApp();
   $nt.show(() => h(AppToast, { type, message }));
 }

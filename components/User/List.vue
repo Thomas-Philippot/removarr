@@ -1,7 +1,10 @@
 <script setup lang="ts">
+import type { user } from "~/server/database/schema";
+type User = typeof user.$inferInsert;
+
 const props = defineProps({
   users: {
-    type: Array,
+    type: Array as PropType<User[]>,
     required: true,
   },
 });
@@ -9,18 +12,18 @@ const props = defineProps({
 
 <template>
   <ul class="list">
-    <li v-for="user in props.users" :key="user.id" class="list-row">
+    <li v-for="item in props.users" :key="item.id" class="list-row">
       <div>
-        <img class="size-10 rounded-box" :src="user.avatar" />
+        <img class="size-10 rounded-box" :src="item.avatar" alt="" />
       </div>
       <div>
-        <div>{{ user.username }}</div>
+        <div>{{ item.username }}</div>
         <div class="text-xs uppercase font-semibold opacity-60">
-          {{ user.email }}
+          {{ item.email }}
         </div>
       </div>
       <div class="badge badge-outline badge-accent">
-        {{ user.role }}
+        {{ item.role }}
       </div>
     </li>
   </ul>

@@ -26,6 +26,7 @@ export interface PlexLibrary {
   name: string;
   enabled: boolean;
   type: string;
+  path: string;
 }
 
 export interface MainSettings {

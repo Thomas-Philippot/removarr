@@ -1,12 +1,19 @@
 <script setup lang="ts">
 import AppToast from "~/components/AppToast.vue";
+import type { MediaResponse } from "~/types/global";
+
+enum MediaType {
+  Movie = 'movie',
+  Show = 'show',
+}
+
 const props = defineProps({
   url: {
     type: String,
     required: true,
   },
   mediaType: {
-    type: String,
+    type: String as PropType<MediaType>,
     required: true,
   },
 });
@@ -14,20 +21,15 @@ const props = defineProps({
 const { data: medias, status } = await useAsyncData(
   props.mediaType,
   async () => {
-    const data = await $fetch(props.url);
+    const data = await $fetch<MediaResponse>(props.url);
     const plexSettings = await $fetch(`/api/settings/plex`);
     const filteredPath = plexSettings.libraries
       .filter((x) => x.type === props.mediaType && x.enabled)
       .map((x) => x.path);
 
-    const result = data.filter((media) => {
+    return data.filter((media) => {
       return filteredPath.some((path) => path.includes(media.rootFolderPath));
-    });
-
-    if (props.mediaType === "movie") {
-      return result.filter((x) => x.hasFile);
-    }
-    return result;
+    }).filter(x => x.statistics.sizeOnDisk > 0);
   },
   { lazy: true },
 );
@@ -35,7 +37,7 @@ const { data: medias, status } = await useAsyncData(
 const { data: user } = useAuth();
 
 const selectAll = ref(false);
-const selection = ref([]);
+const selection = ref<string[]>([]);
 const title = {
   movie: "Films",
   show: "Séries TV",
@@ -51,6 +53,9 @@ async function toggleMediaSelection(id: string) {
 }
 
 async function toggleSelectAll() {
+  if (!medias.value || !selection.value) {
+    return
+  }
   if (selectAll.value) {
     selection.value = medias.value.map((x) => x.imdbId);
   } else {
@@ -59,19 +64,21 @@ async function toggleSelectAll() {
 }
 
 async function sendVote() {
-  await $fetch("/api/votes", {
-    method: "POST",
-    body: {
-      mediaIds: selection.value,
-      userId: user.value.id,
-      mediaType: props.mediaType,
-    },
-  });
-  selection.value = [];
-  showToast("alert alert-success", "Vote pris en compte");
+  if (user.value) {
+    await $fetch("/api/votes", {
+      method: "POST",
+      body: {
+        mediaIds: selection.value,
+        userId: user.value.id,
+        mediaType: props.mediaType,
+      },
+    });
+    selection.value = [];
+    showToast("alert alert-success", "Vote pris en compte");
+  }
 }
 
-function showToast(type, message) {
+function showToast(type: string, message: string) {
   const { $nt } = useNuxtApp();
   $nt.show(() => h(AppToast, { type, message }));
 }
@@ -140,7 +147,7 @@ const selectionLabel = computed(() => {
   <ul v-if="status === 'pending'" class="cards-vertical cursor-wait">
     <li v-for="i in 50" :key="i" class="skeleton h-56 w-full" />
   </ul>
-  <ul v-if="status === 'success'" class="cards-vertical pb-4">
+  <ul v-if="medias && status === 'success'" class="cards-vertical pb-4">
     <li
       v-for="media in medias"
       :key="media.id"
@@ -162,7 +169,7 @@ const selectionLabel = computed(() => {
           <div class="flex m-2">
             <input
               type="checkbox"
-              checked="checked"
+              checked
               class="checkbox checkbox-primary"
             />
           </div>

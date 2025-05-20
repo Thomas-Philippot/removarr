@@ -9,7 +9,7 @@ export default defineNuxtRouteMiddleware(async () => {
     !settings.sonarr.apiKey
   ) {
     const { data, token } = useAuth();
-    if (data.value.role === "user") {
+    if (data.value && data.value.role === "user") {
       // set user as admin
       await $fetch(`/api/users/${data.value.id}`, {
         method: "PUT",
@@ -20,13 +20,13 @@ export default defineNuxtRouteMiddleware(async () => {
       });
     }
 
-    if (!settings.plex.app_uuid) {
+    if (token.value && !settings.plex.api_uuid) {
       await $fetch("/api/settings/plex/uuid", {
         method: "POST",
       });
 
       // persist plex libraries to app settings
-      settings.plex.libraries = await $fetch("/api/plex/libraries", {
+      await $fetch("/api/plex/libraries", {
         method: "POST",
         body: {
           token: token.value,

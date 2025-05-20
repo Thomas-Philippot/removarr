@@ -64,6 +64,16 @@ export default defineNuxtConfig({
     globalAppMiddleware: true,
     provider: {
       type: "local",
+      session: {
+        dataType: {
+          id: 'number',
+          username: 'string',
+          email: 'string',
+          avatar: 'string',
+          role: 'string',
+          createdAt: 'string'
+        }
+      },
       token: {
         type: "",
         headerName: "X-Plex-Token",

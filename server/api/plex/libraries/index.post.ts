@@ -1,13 +1,16 @@
-import { getSettings, type PlexLibrary } from "~/server/repository/settingRepository";
+import {
+  getSettings,
+  type PlexLibrary,
+} from "~/server/repository/settingRepository";
 import PlexApi from "plex-api";
 
 export interface PlexResponse {
   MediaContainer: {
-    size: number
-    allowSync: boolean
-    title1: string
-    Directory: PlexLibraryResponse[]
-  }
+    size: number;
+    allowSync: boolean;
+    title1: string;
+    Directory: PlexLibraryResponse[];
+  };
 }
 
 interface PlexLibraryResponse {
@@ -31,7 +34,7 @@ interface PlexLibraryResponse {
   directory: boolean;
   contentChangedAt: number;
   hidden: number;
-  Location: PlexLocationResponse[]
+  Location: PlexLocationResponse[];
 }
 
 interface PlexLocationResponse {
@@ -49,7 +52,10 @@ export default defineEventHandler(async (event) => {
     https: false,
     token,
     authenticator: {
-      authenticate: (_plexApi: PlexApi, cb: (err?: string, token?: string) => void) => {
+      authenticate: (
+        _plexApi: PlexApi,
+        cb: (err?: string, token?: string) => void,
+      ) => {
         if (!token) {
           return cb("Plex Token not found!");
         }
@@ -87,7 +93,7 @@ export default defineEventHandler(async (event) => {
           enabled: existing?.enabled ?? true,
           type: library.type,
           path: library.Location[0].path,
-        } as PlexLibrary
+        } as PlexLibrary;
       });
     settings.save();
   } catch (error) {

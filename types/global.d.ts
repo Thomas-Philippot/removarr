@@ -36,9 +36,9 @@ export interface MediaStatistics {
     episodeCount: number;
     totalEpisodeCount: number;
     sizeOnDisk: number;
-    releaseGroups: string[],
+    releaseGroups: string[];
     percentOfEpisodes: number;
-  },
+  };
 }
 
 export interface Season {
@@ -165,7 +165,7 @@ export interface Movie extends Media {
   youTubeTrailerId: string;
   studio: string;
   hasFile: boolean;
-  movieFileId: number,
+  movieFileId: number;
   minimumAvailability: string;
   isAvailable: boolean;
   folderName: string;

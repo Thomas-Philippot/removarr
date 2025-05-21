@@ -4,7 +4,7 @@ export default defineEventHandler(async (event) => {
   if (!event.context.params) {
     throw createError({
       statusCode: 400,
-      statusMessage: 'missing url parameter',
+      statusMessage: "missing url parameter",
     });
   }
 
@@ -12,7 +12,7 @@ export default defineEventHandler(async (event) => {
   if (!settings.main.sonarr.apiKey) {
     throw createError({
       statusCode: 400,
-      statusMessage: 'Sonarr api key missing',
+      statusMessage: "Sonarr api key missing",
     });
   }
 

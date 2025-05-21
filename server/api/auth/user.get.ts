@@ -1,16 +1,18 @@
 interface PlexUserResponse {
   user: {
-    id: number
-    uuid: string
-    email: string
-    joined_at: string
-    username: string
-    thumb: string
-  }
+    id: number;
+    uuid: string;
+    email: string;
+    joined_at: string;
+    username: string;
+    thumb: string;
+  };
 }
 
 export default defineEventHandler(async (event) => {
-  const response: PlexUserResponse = await event.$fetch("https://plex.tv/users/account.json");
+  const response: PlexUserResponse = await event.$fetch(
+    "https://plex.tv/users/account.json",
+  );
   const user = response.user;
 
   const exist = await $fetch(`/api/users/${response.user.uuid}`);

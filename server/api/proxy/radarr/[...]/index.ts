@@ -4,7 +4,7 @@ export default defineEventHandler(async (event) => {
   if (!event.context.params) {
     throw createError({
       statusCode: 400,
-      statusMessage: 'missing url parameter',
+      statusMessage: "missing url parameter",
     });
   }
 
@@ -12,7 +12,7 @@ export default defineEventHandler(async (event) => {
   if (!settings.main.radarr.apiKey) {
     throw createError({
       statusCode: 400,
-      statusMessage: 'Missing radarr api key',
+      statusMessage: "Missing radarr api key",
     });
   }
   const url = event.context.params._;

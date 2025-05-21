@@ -9,7 +9,9 @@ const props = defineProps({
   },
 });
 
-const { data: settings } = useFetch<DVRSettings>(`/api/settings/${props.servarr}`);
+const { data: settings } = useFetch<DVRSettings>(
+  `/api/settings/${props.servarr}`,
+);
 
 function openModal() {
   const modal = document.getElementById(`${props.servarr}_modal`);
@@ -46,11 +48,11 @@ async function ping() {
         <div class="card-body">
           <h2 class="card-title">{{ props.servarr }}</h2>
           <p class="text-sm truncate">
-            <span class="mr-2 font-bold">Adresse</span>
+            <span class="mr-2 font-bold">{{ $t("hostname") }}</span>
             {{ settings.hostname }}
           </p>
           <p class="text-sm">
-            <span class="mr-2 font-bold">Port</span>
+            <span class="mr-2 font-bold">{{ $t("port") }}</span>
             {{ settings.port }}
           </p>
           <div class="card-actions justify-end">
@@ -63,11 +65,9 @@ async function ping() {
     </div>
     <dialog :id="`${props.servarr}_modal`" class="modal">
       <div class="modal-box">
-        <h3 class="text-lg font-bold">
-          Modifier le serveur {{ props.servarr }}
-        </h3>
+        <h3 class="text-lg font-bold">{{ $t("edit") }} {{ props.servarr }}</h3>
         <fieldset class="fieldset mt-6">
-          <legend class="label">Hostname</legend>
+          <legend class="label">{{ $t("hostname") }}</legend>
           <input
             v-model="settings.hostname"
             type="text"
@@ -75,7 +75,7 @@ async function ping() {
             :placeholder="`http://${props.servarr}.mydomain.com`"
           />
 
-          <label class="label">Port</label>
+          <label class="label">{{ $t("port") }}</label>
           <input
             v-model="settings.port"
             type="text"
@@ -83,7 +83,7 @@ async function ping() {
             placeholder="7878"
           />
 
-          <label class="label">API KEY</label>
+          <label class="label">{{ $t("api_key") }}</label>
           <input
             v-model="settings.apiKey"
             type="text"
@@ -93,15 +93,15 @@ async function ping() {
         </fieldset>
         <div class="modal-action flex justify-between">
           <button class="btn btn-outline btn-warning" @click="ping">
-            Tester
+            {{ $t("test") }}
           </button>
           <div class="flex gap-2">
             <form method="dialog">
               <!-- if there is a button in form, it will close the modal -->
-              <button class="btn btn-soft btn-accent">Fermer</button>
+              <button class="btn btn-soft btn-accent">{{ $t("close") }}</button>
             </form>
             <button class="btn btn-primary" @click="postData">
-              Sauvegarder
+              {{ $t("save") }}
             </button>
           </div>
         </div>

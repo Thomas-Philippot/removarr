@@ -28,7 +28,7 @@ const { data, status, error } = await useAsyncData(
   <div v-if="error">
     <ErrorAlert />
   </div>
-  <ul v-else-if="status === 'success'" class="list">
+  <ul v-else-if="data && status === 'success'" class="list">
     <li
       v-for="item in data.results"
       :key="item.id"
@@ -41,6 +41,7 @@ const { data, status, error } = await useAsyncData(
               .find((x) => x.imdbId == item.mediaId)
               .images.filter((x) => x.coverType === 'poster')[0].remoteUrl
           "
+          alt=""
           class="w-18 sm:w-20 md:w-24 rounded-box shadow-md"
         />
         <div
@@ -96,7 +97,7 @@ const { data, status, error } = await useAsyncData(
       <div class="avatar-group py-2 -space-x-6 hidden md:block">
         <div v-for="user in item.users" :key="user.id" class="avatar">
           <div class="size-14">
-            <img :src="user.avatar" />
+            <img :src="user.avatar" alt="" />
           </div>
         </div>
       </div>

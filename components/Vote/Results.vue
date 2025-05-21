@@ -74,7 +74,7 @@ const { data, status, error } = await useAsyncData(
         />
         <div class="text-xs uppercase font-semibold opacity-60">
           <span v-if="item.users.length === data.users">
-            {{ $t("can_be_deleted") }}
+            {{ $t("can_be_removed") }}
           </span>
           <span v-else>
             {{ item.users.length }}

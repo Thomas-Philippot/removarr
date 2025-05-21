@@ -10,7 +10,10 @@ async function saveSettings() {
 </script>
 
 <template>
-  <div v-if="plexSettings && status === 'success'" class="flex flex-wrap gap-4 pt-2 pb-6">
+  <div
+    v-if="plexSettings && status === 'success'"
+    class="flex flex-wrap gap-4 pt-2 pb-6"
+  >
     <div
       v-for="item in plexSettings.libraries"
       :key="item.id"
@@ -30,7 +33,9 @@ async function saveSettings() {
     </div>
   </div>
   <div class="flex justify-end md:justify-start">
-    <button class="btn btn-primary" @click="saveSettings">Sauvegarder</button>
+    <button class="btn btn-primary" @click="saveSettings">
+      {{ $t("save") }}
+    </button>
   </div>
 </template>
 

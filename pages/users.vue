@@ -5,7 +5,7 @@ const { data: users, status } = useFetch("/api/users");
 <template>
   <div class="flex items-center pb-6">
     <div class="prose mr-4">
-      <h1>Utilisateurs</h1>
+      <h1>{{ $t("users") }}</h1>
     </div>
   </div>
   <div v-if="users && status === 'success'">

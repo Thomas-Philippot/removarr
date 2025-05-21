@@ -6,7 +6,9 @@ interface DiskSpaceItem {
   totalSpace: number;
 }
 
-const { data, status, error } = useFetch<DiskSpaceItem[]>("/radarr/api/v3/diskspace");
+const { data, status, error } = useFetch<DiskSpaceItem[]>(
+  "/radarr/api/v3/diskspace",
+);
 
 function formatBytes(bytes: number, decimals = 2) {
   if (!+bytes) return "0 Bytes";
@@ -36,7 +38,7 @@ function getStatusColor(item: DiskSpaceItem) {
   <div class="pb-6">
     <div class="flex items-center">
       <div class="prose mb-4">
-        <h1>Stockage</h1>
+        <h1>{{ $t("storage") }}</h1>
       </div>
     </div>
     <div v-if="error">
@@ -68,7 +70,9 @@ function getStatusColor(item: DiskSpaceItem) {
             />
             <div class="flex-none">{{ formatBytes(item.totalSpace) }}</div>
           </div>
-          <div class="text-sm">{{ formatBytes(item.freeSpace) }} libre</div>
+          <div class="text-sm">
+            {{ formatBytes(item.freeSpace) }} {{ $t("available") }}
+          </div>
         </div>
       </div>
     </div>

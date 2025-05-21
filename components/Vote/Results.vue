@@ -22,13 +22,13 @@ const { data, status, error } = await useAsyncData(
 <template>
   <div class="flex items-center pb-6">
     <div class="prose mr-4">
-      <h1>Votes</h1>
+      <h1>{{ $t("votes") }}</h1>
     </div>
   </div>
   <div v-if="error">
     <ErrorAlert />
   </div>
-  <ul v-else-if="status === 'success'" class="list">
+  <ul v-else-if="data && status === 'success'" class="list">
     <li
       v-for="item in data.results"
       :key="item.id"
@@ -41,6 +41,7 @@ const { data, status, error } = await useAsyncData(
               .find((x) => x.imdbId == item.mediaId)
               .images.filter((x) => x.coverType === 'poster')[0].remoteUrl
           "
+          alt=""
           class="w-18 sm:w-20 md:w-24 rounded-box shadow-md"
         />
         <div
@@ -74,14 +75,14 @@ const { data, status, error } = await useAsyncData(
         />
         <div class="text-xs uppercase font-semibold opacity-60">
           <span v-if="item.users.length === data.users">
-            Peut être supprimer
+            {{ $t("can_be_removed") }}
           </span>
           <span v-else>
             {{ item.users.length }}
             {{
               item.users.length > 1
-                ? "utilisateurs souhaitent le supprimer"
-                : "utilisateur souhaite le supprimer"
+                ? $t("users_wants_to_remove")
+                : $t("user_wants_to_remove")
             }}
           </span>
         </div>
@@ -96,13 +97,13 @@ const { data, status, error } = await useAsyncData(
       <div class="avatar-group py-2 -space-x-6 hidden md:block">
         <div v-for="user in item.users" :key="user.id" class="avatar">
           <div class="size-14">
-            <img :src="user.avatar" />
+            <img :src="user.avatar" alt="" />
           </div>
         </div>
       </div>
     </li>
     <li v-if="data.results.length === 0" class="list-row items-center">
-      Aucun résultats, les utilisateurs n'ont pas encore voter
+      {{ $t("no_vote_yet") }}
     </li>
   </ul>
   <ul v-else>

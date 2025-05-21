@@ -2,10 +2,11 @@
 import AppToast from "~/components/AppToast.vue";
 
 const { data: settings } = useFetch("/api/settings");
+const { t } = useI18n();
 
 enum ServarrType {
-  Radarr = 'radarr',
-  Sonarr = 'sonarr',
+  Radarr = "radarr",
+  Sonarr = "sonarr",
 }
 
 const currentServarr: ServarrType[] = [ServarrType.Radarr, ServarrType.Sonarr];
@@ -14,7 +15,7 @@ const step = ref(0);
 
 async function nextStep() {
   if (!settings.value) {
-    return
+    return;
   }
   const currentSetting = settings.value[currentServarr[step.value]];
   if (!currentSetting.hostname || !currentSetting.apiKey) {
@@ -35,9 +36,9 @@ function showToast(type: string, message: string) {
 async function ping() {
   const { error } = await useFetch(`/${currentServarr[step.value]}/ping`);
   if (error.value) {
-    showToast("alert alert-error", "Erreur de connexion");
+    showToast("alert alert-error", t("server_connexion_failed"));
   }
-  showToast("alert alert-success", "Connexion au serveur reussi");
+  showToast("alert alert-success", t("server_connexion_success"));
 }
 </script>
 
@@ -49,21 +50,21 @@ async function ping() {
       <div v-if="settings" class="flex flex-col gap-6">
         <ul class="steps pt-2">
           <li :class="`step ${step >= 0 ? 'step-primary' : ''}`">
-            <span class="step-icon">🍿</span>Step 1
+            <span class="step-icon">🍿</span>{{ $t("step") }} 1
           </li>
           <li :class="`step ${step > 0 ? 'step-primary' : ''}`">
-            Step 2<span class="step-icon">📺</span>
+            <span class="step-icon">📺</span>{{ $t("step") }} 2
           </li>
           <li :class="`step ${step > 1 ? 'step-primary' : ''}`">
-            <span class="step-icon">🎉</span>Step 3
+            <span class="step-icon">🎉</span>{{ $t("step") }} 3
           </li>
         </ul>
         <div v-if="step < 2">
           <h3 class="text-lg font-bold">
-            Configurer le serveur {{ currentServarr[step] }}
+            {{ $t("configure") }} {{ currentServarr[step] }} {{ $t("server") }}
           </h3>
           <fieldset class="fieldset mt-6">
-            <legend class="label">Hostname</legend>
+            <legend class="label">{{ $t("hostname") }}</legend>
             <input
               v-model="settings[currentServarr[step]].hostname"
               required
@@ -71,7 +72,7 @@ async function ping() {
               placeholder="http://radarr.mydomain.com"
             />
 
-            <label class="label">Port</label>
+            <label class="label">{{ $t("port") }}</label>
             <input
               v-model="settings[currentServarr[step]].port"
               required
@@ -81,7 +82,7 @@ async function ping() {
               placeholder="7878"
             />
 
-            <label class="label">API KEY</label>
+            <label class="label">{{ $t("api_key") }}</label>
             <input
               v-model="settings[currentServarr[step]].apiKey"
               required
@@ -95,13 +96,13 @@ async function ping() {
           v-else
           class="flex flex-col items-center justify-center gap-6 py-4"
         >
-          <p class="text-2xl font-bold">Tout est prêt</p>
+          <p class="text-2xl font-bold">{{ $t("all_set") }}</p>
           <img src="/assets/party.webp" alt="party icon" class="h-56" />
         </div>
         <div class="flex justify-between">
           <div>
             <button class="btn btn-outline btn-warning" @click="ping">
-              Tester
+              {{ $t("test") }}
             </button>
           </div>
           <div class="flex gap-2">
@@ -110,17 +111,17 @@ async function ping() {
               class="btn btn-soft btn-accent"
               @click="step--"
             >
-              Précedent
+              {{ $t("previous") }}
             </button>
             <button v-if="step < 2" class="btn btn-primary" @click="nextStep">
-              Suivant
+              {{ $t("next") }}
             </button>
             <NuxtLink
               v-if="step === 2"
               as="button"
               class="btn btn-primary"
               to="/"
-              >Terminé</NuxtLink
+              >{{ $t("done") }}</NuxtLink
             >
           </div>
         </div>

@@ -26,11 +26,11 @@ async function plexLogin() {
   <div class="absolute inset-0 flex justify-center items-center">
     <div class="card bg-base-100 max-w-screen p-2">
       <div class="card-body">
-        <h2 class="card-title justify-center">Bienvenue sur Removarr</h2>
-        <p class="py-4">Pour commencer connect toi avec ton compte plex</p>
+        <h2 class="card-title justify-center">{{ $t("welcome") }}</h2>
+        <p class="py-4">{{ $t("start_with") }}</p>
         <div class="card-actions justify-center">
           <button class="btn btn-block btn-warning" @click="prepareLogin">
-            Connexion
+            {{ $t("login") }}
           </button>
         </div>
       </div>

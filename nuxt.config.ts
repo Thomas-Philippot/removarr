@@ -55,6 +55,7 @@ export default defineNuxtConfig({
     "@sidebase/nuxt-auth",
     "@nuxt/eslint",
     "@vite-pwa/nuxt",
+    "@nuxtjs/i18n",
   ],
   runtimeConfig: {
     baseURL: "/api/auth",
@@ -66,13 +67,13 @@ export default defineNuxtConfig({
       type: "local",
       session: {
         dataType: {
-          id: 'number',
-          username: 'string',
-          email: 'string',
-          avatar: 'string',
-          role: 'string',
-          createdAt: 'string'
-        }
+          id: "number",
+          username: "string",
+          email: "string",
+          avatar: "string",
+          role: "string",
+          createdAt: "string",
+        },
       },
       token: {
         type: "",
@@ -158,6 +159,17 @@ export default defineNuxtConfig({
       navigateFallbackAllowlist: [/^\/$/],
       type: "module",
     },
+  },
+  i18n: {
+    strategy: "no_prefix",
+    detectBrowserLanguage: {
+      useCookie: true,
+      cookieKey: "i18n_redirected",
+    },
+    locales: [
+      { code: "en", name: "English", file: "en.json" },
+      { code: "fr", name: "Français", file: "fr.json" },
+    ],
   },
   css: ["~/assets/app.css"],
 });

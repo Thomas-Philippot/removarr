@@ -2,9 +2,11 @@
 import AppToast from "~/components/AppToast.vue";
 import type { MediaResponse } from "~/types/global";
 
+const { t } = useI18n();
+
 enum MediaType {
-  Movie = 'movie',
-  Show = 'show',
+  Movie = "movie",
+  Show = "show",
 }
 
 const props = defineProps({
@@ -27,9 +29,11 @@ const { data: medias, status } = await useAsyncData(
       .filter((x) => x.type === props.mediaType && x.enabled)
       .map((x) => x.path);
 
-    return data.filter((media) => {
-      return filteredPath.some((path) => path.includes(media.rootFolderPath));
-    }).filter(x => x.statistics.sizeOnDisk > 0);
+    return data
+      .filter((media) => {
+        return filteredPath.some((path) => path.includes(media.rootFolderPath));
+      })
+      .filter((x) => x.statistics.sizeOnDisk > 0);
   },
   { lazy: true },
 );
@@ -38,10 +42,6 @@ const { data: user } = useAuth();
 
 const selectAll = ref(false);
 const selection = ref<string[]>([]);
-const title = {
-  movie: "Films",
-  show: "Séries TV",
-};
 
 async function toggleMediaSelection(id: string) {
   if (selection.value.includes(id)) {
@@ -54,7 +54,7 @@ async function toggleMediaSelection(id: string) {
 
 async function toggleSelectAll() {
   if (!medias.value || !selection.value) {
-    return
+    return;
   }
   if (selectAll.value) {
     selection.value = medias.value.map((x) => x.imdbId);
@@ -74,7 +74,7 @@ async function sendVote() {
       },
     });
     selection.value = [];
-    showToast("alert alert-success", "Vote pris en compte");
+    showToast("alert alert-success", t("vote_registered"));
   }
 }
 
@@ -91,9 +91,9 @@ const indeterminate = computed(() => {
 
 const selectionLabel = computed(() => {
   if (selection.value.length === 0) {
-    return "Tout séléctionner";
+    return t("select_all");
   }
-  return "Tout désélectionner";
+  return t("deselect_all");
 });
 </script>
 
@@ -101,7 +101,7 @@ const selectionLabel = computed(() => {
   <div class="flex items-center justify-between pb-6">
     <div class="flex flex-col sm:flex-row items-start sm:items-center gap-2">
       <div class="prose mr-4">
-        <h1>{{ title[props.mediaType] }}</h1>
+        <h1>{{ $t(props.mediaType) }}</h1>
       </div>
       <fieldset
         class="fieldset bg-base-100 border-base-300 rounded-box w-64 border p-4"
@@ -117,10 +117,12 @@ const selectionLabel = computed(() => {
           {{ selectionLabel }}
         </label>
       </fieldset>
-      <div class="text-title">{{ selection.length }} item(s) séléctionner</div>
+      <div class="text-title">
+        {{ selection.length }} {{ $t("selected_items") }}
+      </div>
     </div>
     <button class="btn btn-primary hidden sm:block" @click="sendVote">
-      Voter
+      {{ $t("vote") }}
     </button>
     <div class="fixed bottom-20 right-4 z-10 sm:hidden">
       <button
@@ -167,11 +169,7 @@ const selectionLabel = computed(() => {
           class="absolute inset-0 rounded-md ring-2 ring-primary"
         >
           <div class="flex m-2">
-            <input
-              type="checkbox"
-              checked
-              class="checkbox checkbox-primary"
-            />
+            <input type="checkbox" checked class="checkbox checkbox-primary" />
           </div>
         </div>
       </figure>

@@ -16,12 +16,12 @@
       ></path>
     </svg>
     <div>
-      <h3 class="font-bold">Erreur lors du chargement des medias</h3>
-      <div class="text-xs">Vérifier vos paramètres Radarr/Sonarr</div>
+      <h3 class="font-bold">{{ $t("media_loading_failed") }}</h3>
+      <div class="text-xs">{{ $t("check_servarr_settings") }}</div>
     </div>
-    <NuxtLink as="button" class="btn btn-dash" to="/settings"
-      >Paramètres</NuxtLink
-    >
+    <NuxtLink as="button" class="btn btn-dash" to="/settings">{{
+      $t("settings")
+    }}</NuxtLink>
   </div>
 </template>
 

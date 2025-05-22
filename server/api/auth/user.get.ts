@@ -1,3 +1,4 @@
+import { getSettings } from "~/server/repository/settingRepository";
 interface PlexUserResponse {
   user: {
     id: number;
@@ -6,17 +7,40 @@ interface PlexUserResponse {
     joined_at: string;
     username: string;
     thumb: string;
+    authToken: string;
   };
 }
 
 export default defineEventHandler(async (event) => {
+  const settings = getSettings().load();
   const response: PlexUserResponse = await event.$fetch(
     "https://plex.tv/users/account.json",
   );
   const user = response.user;
 
-  const exist = await $fetch(`/api/users/${response.user.uuid}`);
+  const exist = await $fetch(`/api/users/${user.uuid}`);
   if (!exist) {
+    // check if user has access to plex shared library
+    const plexUsers = await $fetch("/api/plex/users");
+    const plexUser = plexUsers?.find((u) => parseInt(u.$.id) === user.id);
+    if (!plexUser) {
+      // access denied
+      return false;
+    }
+
+    const inServer = plexUser?.Server?.find(
+      (server) => server.$.machineIdentifier === settings.main.plex.machineId,
+    );
+
+    if (!inServer) {
+      // access denied
+      throw createError({
+        statusCode: 403,
+        statusMessage:
+          "Access denied! you do not have access to this media server",
+      });
+    }
+
     return await $fetch(`/api/users`, {
       method: "POST",
       body: {
@@ -25,6 +49,19 @@ export default defineEventHandler(async (event) => {
         avatar: user.thumb,
         email: user.email,
         createdAt: user.joined_at,
+      },
+    });
+  }
+
+  // Token refresh if changed
+  if (
+    exist.role === "admin" &&
+    user.authToken !== settings.main.plex.auth_token
+  ) {
+    await $fetch("/api/settings/plex", {
+      method: "POST",
+      body: {
+        auth_token: user.authToken,
       },
     });
   }

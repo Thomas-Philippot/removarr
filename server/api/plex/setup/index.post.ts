@@ -3,6 +3,7 @@ import {
   type PlexLibrary,
 } from "~/server/repository/settingRepository";
 import PlexApi from "plex-api";
+import { randomUUID } from "crypto";
 
 export interface PlexResponse {
   MediaContainer: {
@@ -59,7 +60,7 @@ export default defineEventHandler(async (event) => {
         if (!token) {
           return cb("Plex Token not found!");
         }
-        cb(undefined, token.value.token);
+        cb(undefined, token);
       },
     },
     // requestOptions: {
@@ -73,14 +74,34 @@ export default defineEventHandler(async (event) => {
     },
   });
 
+  if (!settings.main.plex.api_uuid) {
+    settings.main.plex.api_uuid = randomUUID();
+  }
+
+  if (data.token) {
+    settings.main.plex.auth_token = data.token;
+  }
+
+  const status = await client.query("/");
+  if (!status?.MediaContainer?.machineIdentifier) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: "Server not found",
+    });
+  }
+
+  settings.main.plex.machineId = status.MediaContainer.machineIdentifier;
+
+  settings.save();
+
   try {
     const response: PlexResponse = await client.query("/library/sections");
     const libraries = response.MediaContainer.Directory;
 
     settings.main.plex.libraries = libraries
-      // Remove libraries that are not movie or show
+      // Remove setup that are not movie or show
       .filter((library) => library.type === "movie" || library.type === "show")
-      // Remove libraries that do not have a metadata agent set (usually personal video libraries)
+      // Remove setup that do not have a metadata agent set (usually personal video setup)
       .filter((library) => library.agent !== "com.plexapp.agents.none")
       .map((library) => {
         const existing = settings.main.plex.libraries.find(

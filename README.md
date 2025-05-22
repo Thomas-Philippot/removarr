@@ -21,6 +21,10 @@ The starts the service
 
 `docker compose up -d`
 
+## Preview
+
+![preview](/public/preview.webp)
+
 ## Development Server
 
 Start the development server on `http://localhost:3000`:

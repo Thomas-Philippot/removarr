@@ -19,6 +19,8 @@ export interface DVRSettings {
 export interface PlexSettings {
   libraries: PlexLibrary[];
   api_uuid: string | null;
+  auth_token?: string;
+  machineId: string | null;
 }
 
 export interface PlexLibrary {

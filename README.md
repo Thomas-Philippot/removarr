@@ -1,5 +1,23 @@
 # Removarr
 
+Removarr allow plex users to vote for media to be deleted on shared plex library
+
+## Features
+
+- Plex integration : 
+  - User authentication
+  - User access
+  - Enable/Disable libraries
+- Sonarr integration : list TV Shows from the enabled plex libraries
+- Radarr integration : list Movies from the enabled plex libraries
+- Display storage information to users
+- Mobile support with PWA.
+
+
+## Preview
+
+![preview](/public/preview.webp)
+
 ## Installation
 
 Define the removarr service in your `compose.yaml` as follows:

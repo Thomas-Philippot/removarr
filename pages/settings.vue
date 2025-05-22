@@ -18,8 +18,8 @@ function saveSettings() {
     <legend class="fieldset-legend">{{ $t("interface") }}</legend>
     <label class="label">{{ $t("language") }}</label>
     <select v-model="currentLocal" class="select w-full">
-      <option v-for="locale in locales" :key="locale.code" :value="locale.code">
-        {{ locale.name }}
+      <option v-for="item in locales" :key="item.code" :value="item.code">
+        {{ item.name }}
       </option>
     </select>
     <button class="btn btn-primary mt-4" @click="saveSettings">

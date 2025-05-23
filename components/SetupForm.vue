@@ -2,6 +2,7 @@
 import AppToast from "~/components/AppToast.vue";
 
 const { data: settings } = useFetch("/api/settings");
+const { token } = useAuth();
 const { t } = useI18n();
 
 enum ServarrType {
@@ -9,7 +10,10 @@ enum ServarrType {
   Sonarr = "sonarr",
 }
 
-const currentServarr: ServarrType[] = [ServarrType.Radarr, ServarrType.Sonarr];
+const currentServarr: Record<number, ServarrType> = {
+  1: ServarrType.Radarr,
+  2: ServarrType.Sonarr,
+};
 
 const step = ref(0);
 
@@ -17,15 +21,34 @@ async function nextStep() {
   if (!settings.value) {
     return;
   }
-  const currentSetting = settings.value[currentServarr[step.value]];
-  if (!currentSetting.hostname || !currentSetting.apiKey) {
-    return;
+  try {
+    if (step.value === 0) {
+      await $fetch("/api/settings/plex", {
+        method: "POST",
+        body: settings.value.plex,
+      });
+      await $fetch("/api/plex/setup", {
+        method: "POST",
+        body: {
+          token: token.value,
+        },
+      });
+    }
+    if (step.value > 0) {
+      const currentSetting = settings.value[currentServarr[step.value]];
+      if (!currentSetting.hostname || !currentSetting.apiKey) {
+        return;
+      }
+      await $fetch(`/api/settings/${currentServarr[step.value]}`, {
+        method: "POST",
+        body: settings.value[currentServarr[step.value]],
+      });
+    }
+    step.value++;
+  } catch (error) {
+    showToast("alert alert-error", t("server_connexion_failed"));
+    console.log(error);
   }
-  await $fetch(`/api/settings/${currentServarr[step.value]}`, {
-    method: "POST",
-    body: settings.value[currentServarr[step.value]],
-  });
-  step.value++;
 }
 
 function showToast(type: string, message: string) {
@@ -50,16 +73,55 @@ async function ping() {
       <div v-if="settings" class="flex flex-col gap-6">
         <ul class="steps pt-2">
           <li :class="`step ${step >= 0 ? 'step-primary' : ''}`">
-            <span class="step-icon">🍿</span>{{ $t("step") }} 1
+            <span class="step-icon">
+              <img src="/assets/plex.svg" alt="plex logo" class="p-1" /> </span
+            >Plex
           </li>
           <li :class="`step ${step > 0 ? 'step-primary' : ''}`">
-            <span class="step-icon">📺</span>{{ $t("step") }} 2
+            <span class="step-icon">
+              <img
+                src="/assets/radarr.svg"
+                alt="plex logo"
+                class="p-1"
+              /> </span
+            >Radarr
           </li>
           <li :class="`step ${step > 1 ? 'step-primary' : ''}`">
-            <span class="step-icon">🎉</span>{{ $t("step") }} 3
+            <span class="step-icon">
+              <img
+                src="/assets/sonarr.svg"
+                alt="plex logo"
+                class="p-1"
+              /> </span
+            >Sonarr
+          </li>
+          <li :class="`step ${step > 2 ? 'step-primary' : ''}`">
+            <span class="step-icon">🎉</span>{{ $t("done") }}
           </li>
         </ul>
-        <div v-if="step < 2">
+        <div v-if="step === 0">
+          <h3 class="text-lg font-bold">{{ $t("configure") }} Plex</h3>
+          <fieldset class="fieldset mt-6">
+            <legend class="label">{{ $t("hostname") }}</legend>
+            <input
+              v-model="settings.plex.hostname"
+              required
+              class="input validator w-full"
+              placeholder=""
+            />
+
+            <label class="label">{{ $t("port") }}</label>
+            <input
+              v-model="settings.plex.port"
+              required
+              minlength="2"
+              type="text"
+              class="input validator w-full"
+              placeholder="32400"
+            />
+          </fieldset>
+        </div>
+        <div v-if="step > 0 && step < 3">
           <h3 class="text-lg font-bold">
             {{ $t("configure") }} {{ currentServarr[step] }} {{ $t("server") }}
           </h3>
@@ -93,7 +155,7 @@ async function ping() {
           </fieldset>
         </div>
         <div
-          v-else
+          v-if="step > 2"
           class="flex flex-col items-center justify-center gap-6 py-4"
         >
           <p class="text-2xl font-bold">{{ $t("all_set") }}</p>
@@ -101,7 +163,11 @@ async function ping() {
         </div>
         <div class="flex justify-between">
           <div>
-            <button class="btn btn-outline btn-warning" @click="ping">
+            <button
+              v-if="step > 0 && step < 3"
+              class="btn btn-outline btn-warning"
+              @click="ping"
+            >
               {{ $t("test") }}
             </button>
           </div>
@@ -113,11 +179,11 @@ async function ping() {
             >
               {{ $t("previous") }}
             </button>
-            <button v-if="step < 2" class="btn btn-primary" @click="nextStep">
+            <button v-if="step < 3" class="btn btn-primary" @click="nextStep">
               {{ $t("next") }}
             </button>
             <NuxtLink
-              v-if="step === 2"
+              v-if="step === 3"
               as="button"
               class="btn btn-primary"
               to="/"

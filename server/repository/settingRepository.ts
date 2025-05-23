@@ -17,6 +17,8 @@ export interface DVRSettings {
 }
 
 export interface PlexSettings {
+  hostname: string | null;
+  port: number;
   libraries: PlexLibrary[];
   api_uuid: string | null;
   auth_token?: string;

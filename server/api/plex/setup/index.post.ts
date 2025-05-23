@@ -48,8 +48,8 @@ export default defineEventHandler(async (event) => {
   const data = await readBody(event);
   const token = data.token;
   const client = new PlexApi({
-    hostname: "192.168.1.181",
-    port: 32400,
+    hostname: settings.main.plex.hostname,
+    port: settings.main.plex.port,
     https: false,
     token,
     authenticator: {
@@ -119,6 +119,9 @@ export default defineEventHandler(async (event) => {
     settings.save();
   } catch (error) {
     console.log(error);
-    return;
+    return createError({
+      statusCode: 500,
+      statusMessage: "Plex Server error",
+    });
   }
 });

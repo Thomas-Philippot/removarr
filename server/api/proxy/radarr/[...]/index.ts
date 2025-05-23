@@ -15,9 +15,14 @@ export default defineEventHandler(async (event) => {
       statusMessage: "Missing radarr api key",
     });
   }
-  const url = event.context.params._;
-  const path = url.replace("/radarr/", "");
-  return await $fetch(`${settings.main.radarr.hostname}/${path}`, {
+  const param = event.context.params._;
+  const path = param.replace("/radarr/", "");
+
+  const url = settings.main.radarr.hostname?.startsWith("http")
+    ? `${settings.main.radarr.hostname}/${path}`
+    : `http://${settings.main.radarr.hostname}:${settings.main.radarr.port}/${path}`;
+
+  return await $fetch(url, {
     headers: {
       "X-Api-Key": settings.main.radarr.apiKey,
     },

@@ -20,25 +20,23 @@ export default defineEventHandler(async (event) => {
 
   const exist = await $fetch(`/api/users/${user.uuid}`);
   if (!exist) {
-    // check if user has access to plex shared library
-    const plexUsers = await $fetch("/api/plex/users");
-    const plexUser = plexUsers?.find((u) => parseInt(u.$.id) === user.id);
-    if (!plexUser) {
-      // access denied
-      return false;
-    }
+    if (settings.main.plex.machineId) {
+      // check if user has access to plex shared library
+      const plexUsers = await $fetch("/api/plex/users");
+      const plexUser = plexUsers?.find((u) => parseInt(u.$.id) === user.id);
+      if (!plexUser) {
+        // access denied
+        return false;
+      }
 
-    const inServer = plexUser?.Server?.find(
-      (server) => server.$.machineIdentifier === settings.main.plex.machineId,
-    );
+      const inServer = plexUser?.Server?.find(
+        (server) => server.$.machineIdentifier === settings.main.plex.machineId,
+      );
 
-    if (!inServer) {
-      // access denied
-      throw createError({
-        statusCode: 403,
-        statusMessage:
-          "Access denied! you do not have access to this media server",
-      });
+      if (!inServer) {
+        // access denied
+        return false;
+      }
     }
 
     return await $fetch(`/api/users`, {

@@ -4,7 +4,7 @@ Removarr allow plex users to vote for media to be deleted on shared plex library
 
 ## Features
 
-- Plex integration : 
+- Plex integration :
   - User authentication
   - User access
   - Enable/Disable libraries
@@ -12,7 +12,6 @@ Removarr allow plex users to vote for media to be deleted on shared plex library
 - Radarr integration : list Movies from the enabled plex libraries
 - Display storage information to users
 - Mobile support with PWA.
-
 
 ## Preview
 

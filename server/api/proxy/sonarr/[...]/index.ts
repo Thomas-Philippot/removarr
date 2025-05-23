@@ -16,9 +16,13 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  const url = event.context.params._;
-  const path = url.replace("/sonarr/", "");
-  return await $fetch(`${settings.main.sonarr.hostname}/${path}`, {
+  const param = event.context.params._;
+  const path = param.replace("/sonarr/", "");
+
+  const url = settings.main.sonarr.hostname?.startsWith("http")
+    ? `${settings.main.sonarr.hostname}/${path}`
+    : `http://${settings.main.sonarr.hostname}:${settings.main.sonarr.port}/${path}`;
+  return await $fetch(url, {
     headers: {
       "X-Api-Key": settings.main.sonarr.apiKey,
     },

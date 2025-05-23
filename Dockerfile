@@ -22,7 +22,9 @@ ENV HOST=0.0.0.0
 ENV PORT=$PORT
 ENV NODE_ENV=production
 
-COPY --from=build /app ./
+COPY --from=build /app/.output ./.output
+COPY --from=build /app/config ./config
+COPY --from=build /app/server ./server
 
 EXPOSE 3000
 

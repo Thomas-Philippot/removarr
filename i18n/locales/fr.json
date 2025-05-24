@@ -44,5 +44,6 @@
   "server_connexion_success": "Connexion au serveur réussi",
   "server_connexion_failed": "Échec de la connexion au serveur",
   "media_loading_failed": "Erreur lors du chargement des medias",
-  "check_servarr_settings": "Vérifier vos paramètres Radarr et Sonarr"
+  "check_servarr_settings": "Vérifier vos paramètres Radarr et Sonarr",
+  "items_per_page": "Items par page"
 }

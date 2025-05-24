@@ -42,6 +42,8 @@ const { data: user } = useAuth();
 
 const selectAll = ref(false);
 const selection = ref<string[]>([]);
+const itemsPerPage = ref(30);
+const page = ref(1);
 
 async function toggleMediaSelection(id: string) {
   if (selection.value.includes(id)) {
@@ -95,10 +97,28 @@ const selectionLabel = computed(() => {
   }
   return t("deselect_all");
 });
+
+const paginatedItems = computed(() => {
+  if (!medias.value) return [];
+  return medias.value.slice(
+    (page.value - 1) * itemsPerPage.value,
+    page.value * itemsPerPage.value
+  );
+})
+
+const totalItems = computed(() => {
+  if (!medias.value) return 0;
+  return medias.value.length;
+})
+
+const pages = computed(() => {
+  if (!medias.value) return 0;
+  return Math.ceil(totalItems.value / itemsPerPage.value);
+})
 </script>
 
 <template>
-  <div class="flex items-center justify-between pb-6">
+  <div class="flex items-center justify-between">
     <div class="flex flex-col sm:flex-row items-start sm:items-center gap-2">
       <div class="prose mr-4">
         <h1>{{ $t(props.mediaType) }}</h1>
@@ -147,34 +167,55 @@ const selectionLabel = computed(() => {
     </div>
   </div>
   <ul v-if="status === 'pending'" class="cards-vertical cursor-wait">
-    <li v-for="i in 50" :key="i" class="skeleton h-56 w-full" />
+    <li v-for="i in itemsPerPage" :key="i" class="skeleton h-56 w-full" />
   </ul>
-  <ul v-if="medias && status === 'success'" class="cards-vertical pb-4">
-    <li
-      v-for="media in medias"
-      :key="media.id"
-      class="shadow-sm cursor-pointer transform-gpu transition duration-300 hover:scale-105"
-      @click="toggleMediaSelection(media.imdbId)"
-    >
-      <figure class="relative">
-        <img
-          :src="
+  <div v-if="medias && status === 'success'" class="pb-4">
+    <ul class="cards-vertical py-6">
+      <li
+        v-for="media in paginatedItems"
+        :key="media.id"
+        class="shadow-sm cursor-pointer transform-gpu transition duration-300 hover:scale-105"
+        @click="toggleMediaSelection(media.imdbId)"
+      >
+        <figure class="relative">
+          <img
+            :src="
             media.images.filter((x) => x.coverType === 'poster')[0].remoteUrl
           "
-          class="rounded-md"
-          :alt="`${media.title}`"
-        />
-        <div
-          v-if="selection.includes(media.imdbId)"
-          class="absolute inset-0 rounded-md ring-2 ring-primary"
-        >
-          <div class="flex m-2">
-            <input type="checkbox" checked class="checkbox checkbox-primary" />
+            class="rounded-md"
+            :alt="`${media.title}`"
+          />
+          <div
+            v-if="selection.includes(media.imdbId)"
+            class="absolute inset-0 rounded-md ring-2 ring-primary"
+          >
+            <div class="flex m-2">
+              <input type="checkbox" checked class="checkbox checkbox-primary" />
+            </div>
           </div>
+        </figure>
+      </li>
+    </ul>
+    <div class="grid grid-cols-3 items-end justify-between">
+      <div class="flex">
+        <fieldset class="fieldset">
+          <legend class="fieldset-legend">Items per page</legend>
+          <select v-model="itemsPerPage" class="select select-sm select-ghost" @change="page = 1">
+            <option :value="30">30</option>
+            <option :value="50">50</option>
+          </select>
+        </fieldset>
+      </div>
+      <div class="flex justify-center">
+        <div class="join">
+          <button class="join-item btn btn-square" :disabled="page === 1" @click="page--">«</button>
+          <button class="join-item btn">Page {{ page }}</button>
+          <button class="join-item btn" :disabled="page === pages" @click="page++">»</button>
         </div>
-      </figure>
-    </li>
-  </ul>
+      </div>
+      <div></div>
+    </div>
+  </div>
   <div v-if="status === 'error'">
     <ErrorAlert />
   </div>

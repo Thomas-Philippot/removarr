@@ -34,16 +34,23 @@ const { data, status, error } = await useAsyncData(
       :key="item.id"
       class="list-row items-center"
     >
-      <div class="relative">
-        <img
+      <div class="relative w-18 sm:w-20 md:w-24">
+        <NuxtImg
           :src="
             data.medias
               .find((x) => x.imdbId == item.mediaId)
               .images.filter((x) => x.coverType === 'poster')[0].remoteUrl
           "
+          loading="lazy"
           alt=""
-          class="w-18 sm:w-20 md:w-24 rounded-box shadow-md"
-        />
+          class="rounded-box shadow-md"
+          custom
+        >
+          <template #default="{ src, isLoaded, imgAttrs }">
+            <img v-if="isLoaded" v-bind="imgAttrs" :src="src" />
+            <div v-else class="skeleton w-full h-28 sm:h-30 md:h-36" />
+          </template>
+        </NuxtImg>
         <div
           v-if="item.users.length === data.users"
           class="absolute inset-0 flex items-center justify-center"
@@ -106,7 +113,7 @@ const { data, status, error } = await useAsyncData(
       {{ $t("no_vote_yet") }}
     </li>
   </ul>
-  <ul v-else>
+  <ul v-else class="list">
     <li v-for="x in 10" :key="x" class="list-row items-center">
       <div class="w-16 h-22 rounded-box shadow-md skeleton" />
       <div class="flex flex-col gap-2">

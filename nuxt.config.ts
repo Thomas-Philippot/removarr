@@ -56,6 +56,7 @@ export default defineNuxtConfig({
     "@nuxt/eslint",
     "@vite-pwa/nuxt",
     "@nuxtjs/i18n",
+    "@nuxt/image",
   ],
   runtimeConfig: {
     baseURL: "/api/auth",
@@ -170,6 +171,9 @@ export default defineNuxtConfig({
       { code: "en", name: "English", file: "en.json" },
       { code: "fr", name: "Français", file: "fr.json" },
     ],
+  },
+  image: {
+    domains: ["image.tmdb.org", "artworks.thetvdb.com"],
   },
   css: ["~/assets/app.css"],
 });

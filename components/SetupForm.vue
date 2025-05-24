@@ -78,8 +78,8 @@ async function ping() {
                 src="/images/plex.svg"
                 alt="plex logo"
                 class="p-1"
-              />
-            </span>Plex
+              /> </span
+            >Plex
           </li>
           <li :class="`step ${step > 0 ? 'step-primary' : ''}`">
             <span class="step-icon">

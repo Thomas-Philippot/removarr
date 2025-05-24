@@ -173,7 +173,7 @@ export default defineNuxtConfig({
     ],
   },
   image: {
-    domains: ["image.tmdb.org", "artworks.thetvdb.com"]
+    domains: ["image.tmdb.org", "artworks.thetvdb.com"],
   },
   css: ["~/assets/app.css"],
 });

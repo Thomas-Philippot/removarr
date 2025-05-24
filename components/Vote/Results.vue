@@ -34,7 +34,7 @@ const { data, status, error } = await useAsyncData(
       :key="item.id"
       class="list-row items-center"
     >
-      <div class="relative w-18 sm:w-20 md:w-24 ">
+      <div class="relative w-18 sm:w-20 md:w-24">
         <NuxtImg
           :src="
             data.medias
@@ -47,11 +47,7 @@ const { data, status, error } = await useAsyncData(
           custom
         >
           <template #default="{ src, isLoaded, imgAttrs }">
-            <img
-              v-if="isLoaded"
-              v-bind="imgAttrs"
-              :src="src"
-            >
+            <img v-if="isLoaded" v-bind="imgAttrs" :src="src" />
             <div v-else class="skeleton w-full h-28 sm:h-30 md:h-36" />
           </template>
         </NuxtImg>

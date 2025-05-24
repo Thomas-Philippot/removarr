@@ -102,19 +102,19 @@ const paginatedItems = computed(() => {
   if (!medias.value) return [];
   return medias.value.slice(
     (page.value - 1) * itemsPerPage.value,
-    page.value * itemsPerPage.value
+    page.value * itemsPerPage.value,
   );
-})
+});
 
 const totalItems = computed(() => {
   if (!medias.value) return 0;
   return medias.value.length;
-})
+});
 
 const pages = computed(() => {
   if (!medias.value) return 0;
   return Math.ceil(totalItems.value / itemsPerPage.value);
-})
+});
 </script>
 
 <template>
@@ -166,7 +166,7 @@ const pages = computed(() => {
       </button>
     </div>
   </div>
-  <div v-if="status === 'pending'"  class="py-6">
+  <div v-if="status === 'pending'" class="py-6">
     <ul class="cards-vertical cursor-wait">
       <li v-for="i in itemsPerPage" :key="i" class="skeleton aspect-2/3" />
     </ul>
@@ -182,7 +182,7 @@ const pages = computed(() => {
         <figure class="relative">
           <NuxtImg
             :src="
-            media.images.filter((x) => x.coverType === 'poster')[0].remoteUrl
+              media.images.filter((x) => x.coverType === 'poster')[0].remoteUrl
             "
             :alt="`${media.title}`"
             class="rounded-md aspect-2/3"
@@ -190,11 +190,7 @@ const pages = computed(() => {
             custom
           >
             <template #default="{ src, isLoaded, imgAttrs }">
-              <img
-                v-if="isLoaded"
-                v-bind="imgAttrs"
-                :src="src"
-              >
+              <img v-if="isLoaded" v-bind="imgAttrs" :src="src" />
               <div v-else class="skeleton" v-bind="imgAttrs" />
             </template>
           </NuxtImg>
@@ -203,7 +199,11 @@ const pages = computed(() => {
             class="absolute inset-0 rounded-md ring-2 ring-primary"
           >
             <div class="flex m-2">
-              <input type="checkbox" checked class="checkbox checkbox-primary" />
+              <input
+                type="checkbox"
+                checked
+                class="checkbox checkbox-primary"
+              />
             </div>
           </div>
         </figure>
@@ -213,7 +213,11 @@ const pages = computed(() => {
       <div class="flex">
         <fieldset class="fieldset">
           <legend class="fieldset-legend">Items per page</legend>
-          <select v-model="itemsPerPage" class="select select-sm select-ghost" @change="page = 1">
+          <select
+            v-model="itemsPerPage"
+            class="select select-sm select-ghost"
+            @change="page = 1"
+          >
             <option :value="30">30</option>
             <option :value="50">50</option>
           </select>
@@ -221,9 +225,21 @@ const pages = computed(() => {
       </div>
       <div class="flex justify-center">
         <div class="join">
-          <button class="join-item btn btn-square" :disabled="page === 1" @click="page--">«</button>
+          <button
+            class="join-item btn btn-square"
+            :disabled="page === 1"
+            @click="page--"
+          >
+            «
+          </button>
           <button class="join-item btn">Page {{ page }}</button>
-          <button class="join-item btn" :disabled="page === pages" @click="page++">»</button>
+          <button
+            class="join-item btn"
+            :disabled="page === pages"
+            @click="page++"
+          >
+            »
+          </button>
         </div>
       </div>
       <div></div>

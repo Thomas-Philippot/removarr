@@ -18,6 +18,7 @@
   },
   "dependencies": {
     "@nuxt/eslint": "^1.4.0",
+    "@nuxt/image": "^1.10.0",
     "@nuxtjs/i18n": "^9.5.4",
     "@vite-pwa/nuxt": "^1.0.1",
     "better-sqlite3": "^11.10.0",

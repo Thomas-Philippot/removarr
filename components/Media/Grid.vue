@@ -166,9 +166,11 @@ const pages = computed(() => {
       </button>
     </div>
   </div>
-  <ul v-if="status === 'pending'" class="cards-vertical cursor-wait">
-    <li v-for="i in itemsPerPage" :key="i" class="skeleton h-56 w-full" />
-  </ul>
+  <div v-if="status === 'pending'"  class="py-6">
+    <ul class="cards-vertical cursor-wait">
+      <li v-for="i in itemsPerPage" :key="i" class="skeleton aspect-2/3" />
+    </ul>
+  </div>
   <div v-if="medias && status === 'success'" class="pb-4">
     <ul class="cards-vertical py-6">
       <li
@@ -178,13 +180,24 @@ const pages = computed(() => {
         @click="toggleMediaSelection(media.imdbId)"
       >
         <figure class="relative">
-          <img
+          <NuxtImg
             :src="
             media.images.filter((x) => x.coverType === 'poster')[0].remoteUrl
-          "
-            class="rounded-md"
+            "
             :alt="`${media.title}`"
-          />
+            class="rounded-md aspect-2/3"
+            loading="lazy"
+            custom
+          >
+            <template #default="{ src, isLoaded, imgAttrs }">
+              <img
+                v-if="isLoaded"
+                v-bind="imgAttrs"
+                :src="src"
+              >
+              <div v-else class="skeleton" v-bind="imgAttrs" />
+            </template>
+          </NuxtImg>
           <div
             v-if="selection.includes(media.imdbId)"
             class="absolute inset-0 rounded-md ring-2 ring-primary"

@@ -74,13 +74,17 @@ async function ping() {
         <ul class="steps pt-2">
           <li :class="`step ${step >= 0 ? 'step-primary' : ''}`">
             <span class="step-icon">
-              <img src="/assets/plex.svg" alt="plex logo" class="p-1" /> </span
-            >Plex
+              <NuxtImg
+                src="/images/plex.svg"
+                alt="plex logo"
+                class="p-1"
+              />
+            </span>Plex
           </li>
           <li :class="`step ${step > 0 ? 'step-primary' : ''}`">
             <span class="step-icon">
-              <img
-                src="/assets/radarr.svg"
+              <NuxtImg
+                src="/images/radarr.svg"
                 alt="plex logo"
                 class="p-1"
               /> </span
@@ -88,8 +92,8 @@ async function ping() {
           </li>
           <li :class="`step ${step > 1 ? 'step-primary' : ''}`">
             <span class="step-icon">
-              <img
-                src="/assets/sonarr.svg"
+              <NuxtImg
+                src="/images/sonarr.svg"
                 alt="plex logo"
                 class="p-1"
               /> </span
@@ -159,7 +163,12 @@ async function ping() {
           class="flex flex-col items-center justify-center gap-6 py-4"
         >
           <p class="text-2xl font-bold">{{ $t("all_set") }}</p>
-          <img src="/assets/party.webp" alt="party icon" class="h-56" />
+          <NuxtImg
+            src="/images/party.webp"
+            alt="party icon"
+            height="150"
+            fit="cover"
+          />
         </div>
         <div class="flex justify-between">
           <div>

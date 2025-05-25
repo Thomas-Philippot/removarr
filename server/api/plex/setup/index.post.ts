@@ -47,10 +47,16 @@ export default defineEventHandler(async (event) => {
   const settings = getSettings().load();
   const data = await readBody(event);
   const token = data.token;
+
+  let hostname = settings.main.plex.hostname;
+  if (settings.main.plex.mode === "ip") {
+    hostname = settings.main.plex.ip;
+  }
+
   const client = new PlexApi({
-    hostname: settings.main.plex.hostname,
+    hostname,
     port: settings.main.plex.port,
-    https: false,
+    https: settings.main.plex.schema === "https://",
     token,
     authenticator: {
       authenticate: (

@@ -9,6 +9,7 @@ const props = defineProps({
   },
 });
 
+const { t } = useI18n();
 const { data: settings } = useFetch<DVRSettings>(
   `/api/settings/${props.servarr}`,
 );
@@ -19,12 +20,16 @@ function openModal() {
 }
 
 async function postData() {
+  await saveSettings();
+  const modal = document.getElementById(`${props.servarr}_modal`);
+  modal?.close();
+}
+
+async function saveSettings() {
   await $fetch(`/api/settings/${props.servarr}`, {
     method: "POST",
     body: settings.value,
   });
-  const modal = document.getElementById(`${props.servarr}_modal`);
-  modal?.close();
 }
 
 function showToast(type: string, message: string) {
@@ -33,11 +38,13 @@ function showToast(type: string, message: string) {
 }
 
 async function ping() {
+  await saveSettings();
   const { error } = await useFetch(`/${props.servarr}/ping`);
   if (error.value) {
-    showToast("alert alert-error", "Erreur de connexion");
+    showToast("alert alert-error", t("server_connexion_failed"));
+    return;
   }
-  showToast("alert alert-success", "Connexion au serveur reussi");
+  showToast("alert alert-success", t("server_connexion_success"));
 }
 </script>
 
@@ -66,31 +73,80 @@ async function ping() {
     <dialog :id="`${props.servarr}_modal`" class="modal">
       <div class="modal-box">
         <h3 class="text-lg font-bold">{{ $t("edit") }} {{ props.servarr }}</h3>
-        <fieldset class="fieldset mt-6">
-          <legend class="label">{{ $t("hostname") }}</legend>
-          <input
-            v-model="settings.hostname"
-            type="text"
-            class="input w-full"
-            :placeholder="`http://${props.servarr}.mydomain.com`"
-          />
+        <div role="tablist" class="tabs tabs-border mt-6 mb-2">
+          <a
+            role="tab"
+            :class="`tab ${settings.mode === 'ip' ? 'tab-active' : ''}`"
+            @click="settings.mode = 'ip'"
+          >
+            {{ $t("ip") }} / {{ $t("port") }}
+          </a>
+          <a
+            role="tab"
+            :class="`tab ${settings.mode === 'hostname' ? 'tab-active' : ''}`"
+            @click="settings.mode = 'hostname'"
+          >
+            {{ $t("hostname") }}
+          </a>
+        </div>
+        <div v-if="settings.mode === 'hostname'">
+          <fieldset class="fieldset mt-6">
+            <label class="label">{{ $t("hostname") }}</label>
+            <label class="input validator w-full">
+              <select v-model="settings.schema">
+                <option value="https://">Https://</option>
+                <option value="http://">Http://</option>
+              </select>
+              <input
+                v-model="settings.hostname"
+                required
+                class="grow"
+                placeholder=""
+              />
+            </label>
 
-          <label class="label">{{ $t("port") }}</label>
-          <input
-            v-model="settings.port"
-            type="text"
-            class="input w-full"
-            placeholder="7878"
-          />
+            <label class="label">{{ $t("api_key") }}</label>
+            <input
+              v-model="settings.apiKey"
+              type="text"
+              class="input w-full"
+              placeholder=""
+            />
+          </fieldset>
+        </div>
+        <div v-else>
+          <fieldset class="fieldset">
+            <label class="label">{{ $t("ip") }}</label>
+            <label class="input validator w-full">
+              <select v-model="settings.schema">
+                <option value="https://">Https://</option>
+                <option value="http://">Http://</option>
+              </select>
+              <input
+                v-model="settings.ip"
+                required
+                class="grow"
+                placeholder=""
+              />
+            </label>
 
-          <label class="label">{{ $t("api_key") }}</label>
-          <input
-            v-model="settings.apiKey"
-            type="text"
-            class="input w-full"
-            placeholder=""
-          />
-        </fieldset>
+            <label class="label">{{ $t("port") }}</label>
+            <input
+              v-model="settings.port"
+              type="text"
+              class="input w-full"
+              placeholder="7878"
+            />
+
+            <label class="label">{{ $t("api_key") }}</label>
+            <input
+              v-model="settings.apiKey"
+              type="text"
+              class="input w-full"
+              placeholder=""
+            />
+          </fieldset>
+        </div>
         <div class="modal-action flex justify-between">
           <button class="btn btn-outline btn-warning" @click="ping">
             {{ $t("test") }}

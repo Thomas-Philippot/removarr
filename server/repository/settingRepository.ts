@@ -11,13 +11,19 @@ const SETTINGS_PATH = process.env.CONFIG_DIRECTORY
   : path.join(__dirname, "../../config/settings.json");
 
 export interface DVRSettings {
+  mode: "hostname" | "ip";
+  schema: "http://" | "https://";
   hostname: string | null;
+  ip: string | null;
   port: number;
   apiKey: string | null;
 }
 
 export interface PlexSettings {
+  mode: "hostname" | "ip";
+  schema: "http://" | "https://";
   hostname: string | null;
+  ip: string | null;
   port: number;
   libraries: PlexLibrary[];
   api_uuid: string | null;
@@ -46,21 +52,32 @@ class Settings {
   constructor(initialSettings?: MainSettings) {
     this.data = {
       plex: {
+        mode: "hostname",
+        schema: "http://",
         libraries: [],
         api_uuid: null,
       },
       radarr: {
+        mode: "hostname",
         hostname: null,
+        schema: "https://",
+        ip: null,
         port: 7878,
         apiKey: null,
       },
       sonarr: {
+        mode: "hostname",
         hostname: null,
+        schema: "https://",
+        ip: null,
         port: 8989,
         apiKey: null,
       },
       overseerr: {
+        mode: "hostname",
         hostname: null,
+        schema: "https://",
+        ip: null,
         port: 5055,
         apiKey: null,
       },

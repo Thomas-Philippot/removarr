@@ -18,11 +18,8 @@ const currentServarr: Record<number, ServarrType> = {
 const step = ref(0);
 
 async function nextStep() {
-  if (!settings.value) {
-    return;
-  }
   try {
-    if (step.value === 0) {
+    if (step.value === 0 && settings.value) {
       await $fetch("/api/settings/plex", {
         method: "POST",
         body: settings.value.plex,
@@ -35,14 +32,7 @@ async function nextStep() {
       });
     }
     if (step.value > 0) {
-      const currentSetting = settings.value[currentServarr[step.value]];
-      if (!currentSetting.hostname || !currentSetting.apiKey) {
-        return;
-      }
-      await $fetch(`/api/settings/${currentServarr[step.value]}`, {
-        method: "POST",
-        body: settings.value[currentServarr[step.value]],
-      });
+      await saveCurrentSettings();
     }
     step.value++;
   } catch (error) {
@@ -51,15 +41,29 @@ async function nextStep() {
   }
 }
 
+async function saveCurrentSettings() {
+  if (!settings.value) return;
+  const currentSetting = settings.value[currentServarr[step.value]];
+  if (!currentSetting.hostname || !currentSetting.apiKey) {
+    return;
+  }
+  await $fetch(`/api/settings/${currentServarr[step.value]}`, {
+    method: "POST",
+    body: settings.value[currentServarr[step.value]],
+  });
+}
+
 function showToast(type: string, message: string) {
   const { $nt } = useNuxtApp();
   $nt.show(() => h(AppToast, { type, message }));
 }
 
 async function ping() {
+  await saveCurrentSettings();
   const { error } = await useFetch(`/${currentServarr[step.value]}/ping`);
   if (error.value) {
     showToast("alert alert-error", t("server_connexion_failed"));
+    return;
   }
   showToast("alert alert-success", t("server_connexion_success"));
 }
@@ -105,58 +109,148 @@ async function ping() {
         </ul>
         <div v-if="step === 0">
           <h3 class="text-lg font-bold">{{ $t("configure") }} Plex</h3>
-          <fieldset class="fieldset mt-6">
-            <legend class="label">{{ $t("hostname") }}</legend>
-            <input
-              v-model="settings.plex.hostname"
-              required
-              class="input validator w-full"
-              placeholder=""
-            />
-
-            <label class="label">{{ $t("port") }}</label>
-            <input
-              v-model="settings.plex.port"
-              required
-              minlength="2"
-              type="text"
-              class="input validator w-full"
-              placeholder="32400"
-            />
-          </fieldset>
+          <div role="tablist" class="tabs tabs-border mt-6 mb-2">
+            <a
+              role="tab"
+              :class="`tab ${settings.plex.mode === 'ip' ? 'tab-active' : ''}`"
+              @click="settings.plex.mode = 'ip'"
+            >
+              {{ $t("ip") }} / {{ $t("port") }}
+            </a>
+            <a
+              role="tab"
+              :class="`tab ${settings.plex.mode === 'hostname' ? 'tab-active' : ''}`"
+              @click="settings.plex.mode = 'hostname'"
+            >
+              {{ $t("hostname") }}
+            </a>
+          </div>
+          <div v-if="settings.plex.mode === 'hostname'">
+            <fieldset class="fieldset">
+              <label class="label">{{ $t("hostname") }}</label>
+              <label class="input validator w-full">
+                <select v-model="settings.plex.schema">
+                  <option value="https://">Https://</option>
+                  <option value="http://">Http://</option>
+                </select>
+                <input
+                  v-model="settings.plex.hostname"
+                  required
+                  class="grow"
+                  placeholder=""
+                />
+              </label>
+            </fieldset>
+          </div>
+          <div v-else>
+            <fieldset class="fieldset">
+              <label class="label">{{ $t("ip") }}</label>
+              <label class="input validator w-full">
+                <select v-model="settings.plex.schema">
+                  <option value="https://">Https://</option>
+                  <option value="http://">Http://</option>
+                </select>
+                <input
+                  v-model="settings.plex.ip"
+                  required
+                  class="grow"
+                  placeholder=""
+                />
+              </label>
+              <label class="label">{{ $t("port") }}</label>
+              <input
+                v-model="settings.plex.port"
+                required
+                minlength="2"
+                type="text"
+                class="input validator w-full"
+                placeholder="32400"
+              />
+            </fieldset>
+          </div>
         </div>
         <div v-if="step > 0 && step < 3">
           <h3 class="text-lg font-bold">
             {{ $t("configure") }} {{ currentServarr[step] }} {{ $t("server") }}
           </h3>
-          <fieldset class="fieldset mt-6">
-            <legend class="label">{{ $t("hostname") }}</legend>
-            <input
-              v-model="settings[currentServarr[step]].hostname"
-              required
-              class="input validator w-full"
-              placeholder="http://radarr.mydomain.com"
-            />
+          <div role="tablist" class="tabs tabs-border mt-6 mb-2">
+            <a
+              role="tab"
+              :class="`tab ${settings[currentServarr[step]].mode === 'ip' ? 'tab-active' : ''}`"
+              @click="settings[currentServarr[step]].mode = 'ip'"
+            >
+              {{ $t("ip") }} / {{ $t("port") }}
+            </a>
+            <a
+              role="tab"
+              :class="`tab ${settings[currentServarr[step]].mode === 'hostname' ? 'tab-active' : ''}`"
+              @click="settings[currentServarr[step]].mode = 'hostname'"
+            >
+              {{ $t("hostname") }}
+            </a>
+          </div>
+          <div v-if="settings[currentServarr[step]].mode === 'hostname'">
+            <fieldset class="fieldset">
+              <label class="label">{{ $t("hostname") }}</label>
+              <label class="input validator w-full">
+                <select v-model="settings[currentServarr[step]].schema">
+                  <option value="https://">Https://</option>
+                  <option value="http://">Http://</option>
+                </select>
+                <input
+                  v-model="settings[currentServarr[step]].hostname"
+                  required
+                  class="grow"
+                  placeholder=""
+                />
+              </label>
 
-            <label class="label">{{ $t("port") }}</label>
-            <input
-              v-model="settings[currentServarr[step]].port"
-              required
-              minlength="2"
-              type="text"
-              class="input validator w-full"
-              placeholder="7878"
-            />
+              <label class="label">{{ $t("api_key") }}</label>
+              <input
+                v-model="settings[currentServarr[step]].apiKey"
+                required
+                type="text"
+                class="input validator w-full"
+                placeholder=""
+              />
+            </fieldset>
+          </div>
+          <div v-else>
+            <fieldset class="fieldset">
+              <label class="label">{{ $t("ip") }}</label>
+              <label class="input validator w-full">
+                <select v-model="settings[currentServarr[step]].schema">
+                  <option value="https://">Https://</option>
+                  <option value="http://">Http://</option>
+                </select>
+                <input
+                  v-model="settings[currentServarr[step]].ip"
+                  required
+                  class="grow"
+                  placeholder=""
+                />
+              </label>
 
-            <label class="label">{{ $t("api_key") }}</label>
-            <input
-              v-model="settings[currentServarr[step]].apiKey"
-              required
-              type="text"
-              class="input validator w-full"
-              placeholder=""
-            />
-          </fieldset>
+              <label class="label">{{ $t("port") }}</label>
+              <input
+                v-model="settings[currentServarr[step]].port"
+                required
+                minlength="2"
+                type="text"
+                class="input validator w-full"
+                placeholder="7878"
+              />
+
+              <label class="label">{{ $t("api_key") }}</label>
+              <input
+                v-model="settings[currentServarr[step]].apiKey"
+                required
+                type="text"
+                class="input validator w-full"
+                placeholder=""
+              />
+            </fieldset>
+          </div>
         </div>
         <div
           v-if="step > 2"
@@ -168,6 +262,7 @@ async function ping() {
             alt="party icon"
             height="150"
             fit="cover"
+            loading="lazy"
           />
         </div>
         <div class="flex justify-between">

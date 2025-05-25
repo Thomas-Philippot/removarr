@@ -26,6 +26,7 @@
   "interface": "Interface",
   "application_settings": "Régler les paramètres de vos applications",
   "hostname": "Hôte",
+  "ip": "IP",
   "port": "Port",
   "api_key": "Clé API",
   "plex_settings": "Régler les paramètres de plex",

@@ -19,9 +19,10 @@ export default defineEventHandler(async (event) => {
   const param = event.context.params._;
   const path = param.replace("/sonarr/", "");
 
-  const url = settings.main.sonarr.hostname?.startsWith("http")
-    ? `${settings.main.sonarr.hostname}/${path}`
-    : `http://${settings.main.sonarr.hostname}:${settings.main.sonarr.port}/${path}`;
+  const url =
+    settings.main.sonarr.mode === "ip"
+      ? `${settings.main.sonarr.schema}${settings.main.sonarr.ip}:${settings.main.sonarr.port}/${path}`
+      : `${settings.main.sonarr.schema}${settings.main.sonarr.hostname}/${path}`;
   return await $fetch(url, {
     headers: {
       "X-Api-Key": settings.main.sonarr.apiKey,

@@ -26,6 +26,7 @@
   "interface": "Interface",
   "application_settings": "Manage your applications settings",
   "hostname": "Hostname",
+  "ip": "IP",
   "port": "Port",
   "api_key": "Api Key",
   "plex_settings": "Manage your plex settings",
@@ -44,5 +45,6 @@
   "server_connexion_success": "Server connexion success",
   "server_connexion_failed": "Server connexion failed",
   "media_loading_failed": "Error while loading medias",
-  "check_servarr_settings": "Check Radarr and Sonarr settings"
+  "check_servarr_settings": "Check Radarr and Sonarr settings",
+  "items_per_page": "Items per page"
 }

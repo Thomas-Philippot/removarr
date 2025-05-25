@@ -212,7 +212,7 @@ const pages = computed(() => {
     <div class="grid grid-cols-3 items-end justify-between">
       <div class="flex">
         <fieldset class="fieldset">
-          <legend class="fieldset-legend">Items per page</legend>
+          <legend class="fieldset-legend">{{ $t("items_per_page") }}</legend>
           <select
             v-model="itemsPerPage"
             class="select select-sm select-ghost"

@@ -18,10 +18,10 @@ export default defineEventHandler(async (event) => {
   const param = event.context.params._;
   const path = param.replace("/radarr/", "");
 
-  const url = settings.main.radarr.hostname?.startsWith("http")
-    ? `${settings.main.radarr.hostname}/${path}`
-    : `http://${settings.main.radarr.hostname}:${settings.main.radarr.port}/${path}`;
-
+  const url =
+    settings.main.radarr.mode === "ip"
+      ? `${settings.main.radarr.schema}${settings.main.radarr.ip}:${settings.main.radarr.port}/${path}`
+      : `${settings.main.radarr.schema}${settings.main.radarr.hostname}/${path}`;
   return await $fetch(url, {
     headers: {
       "X-Api-Key": settings.main.radarr.apiKey,

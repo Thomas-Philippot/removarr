@@ -1,7 +1,7 @@
 <script setup lang="ts"></script>
 
 <template>
-  <div role="alert" class="alert alert-error alert-soft">
+  <div role="alert" class="alert alert-error alert-soft mt-4">
     <svg
       xmlns="http://www.w3.org/2000/svg"
       fill="none"

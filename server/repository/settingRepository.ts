@@ -10,6 +10,28 @@ const SETTINGS_PATH = process.env.CONFIG_DIRECTORY
   ? `${process.env.CONFIG_DIRECTORY}/settings.json`
   : path.join(__dirname, "../../config/settings.json");
 
+export interface NotificationAgentConfig {
+  enabled: boolean;
+  types: number;
+  options: any;
+}
+
+export interface NotificationAgentGotify extends NotificationAgentConfig {
+  options: {
+    url: string;
+    token: string;
+    priority: number;
+  }
+}
+
+export interface NotificationAgents {
+  gotify: NotificationAgentGotify;
+}
+
+export interface NotificationSettings {
+  agents: NotificationAgents
+}
+
 export interface DVRSettings {
   mode: "hostname" | "ip";
   schema: "http://" | "https://";
@@ -44,6 +66,7 @@ export interface MainSettings {
   radarr: DVRSettings;
   sonarr: DVRSettings;
   overseerr: DVRSettings;
+  notifications: NotificationSettings;
 }
 
 class Settings {
@@ -81,6 +104,19 @@ class Settings {
         port: 5055,
         apiKey: null,
       },
+      notifications: {
+        agents: {
+          gotify: {
+            enabled: false,
+            types: 0,
+            options: {
+              url: "",
+              token: "",
+              priority: 5
+            }
+          }
+        }
+      }
     };
     if (initialSettings) {
       this.data = merge(this.data, initialSettings);

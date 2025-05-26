@@ -26,9 +26,10 @@ export interface PlexSettings {
   ip: string | null;
   port: number;
   libraries: PlexLibrary[];
+  filter: boolean;
   api_uuid: string | null;
   auth_token?: string;
-  machineId: string | null;
+  machineId?: string | null;
 }
 
 export interface PlexLibrary {
@@ -54,7 +55,11 @@ class Settings {
       plex: {
         mode: "hostname",
         schema: "http://",
+        hostname: null,
+        ip: null,
+        port: 32400,
         libraries: [],
+        filter: true,
         api_uuid: null,
       },
       radarr: {

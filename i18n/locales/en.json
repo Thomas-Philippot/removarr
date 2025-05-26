@@ -19,6 +19,8 @@
   "next": "Next",
   "previous": "Previous",
   "done": "Done",
+  "enabled": "Enabled",
+  "disabled": "Disabled",
   "all_set": "All set",
   "configure": "Configure",
   "server": "server",
@@ -46,5 +48,7 @@
   "server_connexion_failed": "Server connexion failed",
   "media_loading_failed": "Error while loading medias",
   "check_servarr_settings": "Check Radarr and Sonarr settings",
-  "items_per_page": "Items per page"
+  "items_per_page": "Items per page",
+  "libraries_filter": "Libraries filter",
+  "settings_saved": "Settings saved"
 }

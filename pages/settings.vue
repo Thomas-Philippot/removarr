@@ -1,10 +1,22 @@
 <script setup lang="ts">
+import AppToast from "~/components/AppToast.vue";
 const { locales, locale, setLocale } = useI18n();
 
+const { t } = useI18n();
 const currentLocal = ref(locale);
 
 function saveSettings() {
   setLocale(currentLocal.value);
+  onSettingsSaved();
+}
+
+function onSettingsSaved() {
+  showToast("alert alert-success", t("settings_saved"));
+}
+
+function showToast(type: string, message: string) {
+  const { $nt } = useNuxtApp();
+  $nt.show(() => h(AppToast, { type, message }));
 }
 </script>
 
@@ -31,16 +43,28 @@ function saveSettings() {
     <p>{{ $t("application_settings") }}</p>
   </div>
   <div class="flex flex-wrap gap-6 pb-6">
-    <ServarrSettingsForm key="sonarr" servarr="sonarr" />
-    <ServarrSettingsForm key="radarr" servarr="radarr" />
-    <ServarrSettingsForm key="overseerr" servarr="overseerr" />
+    <ServarrSettingsForm
+      key="sonarr"
+      servarr="sonarr"
+      @save="onSettingsSaved"
+    />
+    <ServarrSettingsForm
+      key="radarr"
+      servarr="radarr"
+      @save="onSettingsSaved"
+    />
+    <ServarrSettingsForm
+      key="overseerr"
+      servarr="overseerr"
+      @save="onSettingsSaved"
+    />
   </div>
   <div class="prose">
     <h2>Plex</h2>
     <p>{{ $t("plex_settings") }}</p>
   </div>
   <div class="mb-6">
-    <PlexSettings />
+    <PlexSettings @save="onSettingsSaved" />
   </div>
 </template>
 

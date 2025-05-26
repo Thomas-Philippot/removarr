@@ -9,6 +9,8 @@ const props = defineProps({
   },
 });
 
+const emits = defineEmits(["save"]);
+
 const { t } = useI18n();
 const { data: settings } = useFetch<DVRSettings>(
   `/api/settings/${props.servarr}`,
@@ -30,6 +32,7 @@ async function saveSettings() {
     method: "POST",
     body: settings.value,
   });
+  emits("save");
 }
 
 function showToast(type: string, message: string) {

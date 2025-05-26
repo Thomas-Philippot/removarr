@@ -25,6 +25,11 @@ const { data: medias, status } = await useAsyncData(
   async () => {
     const data = await $fetch<MediaResponse>(props.url);
     const plexSettings = await $fetch(`/api/settings/plex`);
+
+    if (!plexSettings.filter) {
+      return data.filter((x) => x.statistics.sizeOnDisk > 0);
+    }
+
     const filteredPath = plexSettings.libraries
       .filter((x) => x.type === props.mediaType && x.enabled)
       .map((x) => x.path);

@@ -27,3 +27,7 @@ logs
 # database
 config/db/*.sqlite3*
 config/settings.json
+
+# docs
+docs/.vitepress/cache
+docs/.vitepress/dist

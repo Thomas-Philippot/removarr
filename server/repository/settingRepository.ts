@@ -59,7 +59,7 @@ class Settings {
         ip: null,
         port: 32400,
         libraries: [],
-        filter: true,
+        filter: false,
         api_uuid: null,
       },
       radarr: {

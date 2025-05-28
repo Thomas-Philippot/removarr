@@ -18,6 +18,12 @@ export default defineConfig({
         items: [
           { text: 'Installation', link: '/install' },
         ]
+      },
+      {
+        text: 'Settings',
+        items: [
+          { text: 'Plex', link: '/settings/plex' },
+        ]
       }
     ],
 

@@ -4292,10 +4292,10 @@ var walker = (object, identities, superJson, dedupe, path = [], objectsInThisPat
   });
   const result = isEmptyObject(innerAnnotations) ? {
     transformedValue,
-    annotations: !!transformationResult ? [transformationResult.type] : void 0
+    annotations: transformationResult ? [transformationResult.type] : void 0
   } : {
     transformedValue,
-    annotations: !!transformationResult ? [transformationResult.type, innerAnnotations] : innerAnnotations
+    annotations: transformationResult ? [transformationResult.type, innerAnnotations] : innerAnnotations
   };
   if (!primitive) {
     seenObjects.set(object, result);

@@ -21,6 +21,10 @@ export default defineConfig({
         text: "Settings",
         items: [{ text: "Plex", link: "/settings/plex" }],
       },
+      {
+        text: "Support",
+        items: [{ text: "Version 2 upgrade", link: "/support/upgrade" }],
+      },
     ],
 
     socialLinks: [

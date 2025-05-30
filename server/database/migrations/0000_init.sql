@@ -9,8 +9,9 @@ CREATE TABLE `user` (
 --> statement-breakpoint
 CREATE UNIQUE INDEX `user_email_unique` ON `user` (`email`);--> statement-breakpoint
 CREATE TABLE `vote` (
-	`media_id` text,
-	`user_id` text,
+	`media_id` text NOT NULL,
+	`user_id` text NOT NULL,
 	`media_type` text,
+	`servarr_id` text NOT NULL,
 	PRIMARY KEY(`media_id`, `user_id`)
 );

@@ -18,6 +18,10 @@ export const vote = sqliteTable(
     mediaId: text("media_id").notNull(),
     userId: text("user_id").notNull(),
     mediaType: text("media_type"),
+    servarrId: text("servarr_id").notNull(),
   },
   (table) => [primaryKey({ columns: [table.mediaId, table.userId] })],
 );
+
+export type User = typeof user.$inferInsert;
+export type Vote = typeof vote.$inferInsert;

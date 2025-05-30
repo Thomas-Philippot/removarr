@@ -1,9 +1,13 @@
 import { db } from "~/server/database";
 import { vote } from "~/server/database/schema";
-import { eq, and } from "drizzle-orm";
+
+interface Vote {
+  mediaId: string;
+  servarrId: number;
+}
 
 interface MultipleVotes {
-  mediaIds: string[];
+  medias: Vote[];
   userId: string;
   mediaType: string;
 }
@@ -11,21 +15,14 @@ interface MultipleVotes {
 export default defineEventHandler(async (event) => {
   try {
     const data: MultipleVotes = await readBody(event);
-
-    // delete previous user votes for this mediaType (movie/tv)
-    await db
-      .delete(vote)
-      .where(
-        and(eq(vote.userId, data.userId), eq(vote.mediaType, data.mediaType)),
-      );
-
-    const voteInserts = data.mediaIds.map((movieId) => ({
-      mediaId: movieId,
+    const voteInserts = data.medias.map((item) => ({
+      mediaId: item.mediaId,
       userId: data.userId,
       mediaType: data.mediaType,
+      servarrId: item.servarrId,
     }));
     await db.insert(vote).values(voteInserts);
-    return { response: "a voté" };
+    return { response: "Ok" };
   } catch (error: any) {
     throw createError({
       statusCode: 400,

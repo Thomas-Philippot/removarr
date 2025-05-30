@@ -18,4 +18,3 @@ features:
   - title: Radarr / Sonarr
     details: Display Radarr movies and Sonarr TV Shows
 ---
-

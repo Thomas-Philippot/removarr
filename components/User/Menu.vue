@@ -28,7 +28,16 @@ function close() {
     >
       <li class="menu-title text-base-content">{{ user.username }}</li>
       <li @click="close">
+        <NuxtLink to="/user/votes">{{ $t("my_votes") }}</NuxtLink>
+      </li>
+      <li @click="close">
         <NuxtLink to="/users">{{ $t("users") }}</NuxtLink>
+      </li>
+      <li v-if="user.role === 'admin'" @click="close">
+        <NuxtLink class="justify-between" to="/remove">
+          {{ $t("remove") }}
+          <span class="badge badge-soft badge-warning">{{ user.role }}</span>
+        </NuxtLink>
       </li>
       <li v-if="user.role === 'admin'" @click="close">
         <NuxtLink class="justify-between" to="/settings">

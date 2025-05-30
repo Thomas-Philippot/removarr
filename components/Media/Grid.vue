@@ -1,12 +1,17 @@
 <script setup lang="ts">
 import AppToast from "~/components/AppToast.vue";
-import type { MediaResponse } from "~/types/global";
+import type { MediaResponse, Media } from "~/types/global";
 
 const { t } = useI18n();
 
 enum MediaType {
   Movie = "movie",
   Show = "show",
+}
+
+interface Vote {
+  mediaId: string;
+  servarrId: number;
 }
 
 const props = defineProps({
@@ -46,16 +51,16 @@ const { data: medias, status } = await useAsyncData(
 const { data: user } = useAuth();
 
 const selectAll = ref(false);
-const selection = ref<string[]>([]);
+const selection = ref<Vote[]>([]);
 const itemsPerPage = ref(30);
 const page = ref(1);
 
-async function toggleMediaSelection(id: string) {
-  if (selection.value.includes(id)) {
-    const index = selection.value.indexOf(id);
+async function toggleMediaSelection(media: Media) {
+  if (selection.value.map((x) => x.mediaId).includes(media.imdbId)) {
+    const index = selection.value.indexOf(media);
     selection.value.splice(index, 1);
   } else {
-    selection.value.push(id);
+    selection.value.push({ mediaId: media.imdbId, servarrId: media.id });
   }
 }
 
@@ -64,7 +69,9 @@ async function toggleSelectAll() {
     return;
   }
   if (selectAll.value) {
-    selection.value = medias.value.map((x) => x.imdbId);
+    selection.value = medias.value.map((x) => {
+      return { mediaId: x.imdbId, servarrId: x.id };
+    });
   } else {
     selection.value = [];
   }
@@ -75,7 +82,7 @@ async function sendVote() {
     await $fetch("/api/votes", {
       method: "POST",
       body: {
-        mediaIds: selection.value,
+        medias: selection.value,
         userId: user.value.id,
         mediaType: props.mediaType,
       },
@@ -182,7 +189,7 @@ const pages = computed(() => {
         v-for="media in paginatedItems"
         :key="media.id"
         class="shadow-sm cursor-pointer transform-gpu transition duration-300 hover:scale-105"
-        @click="toggleMediaSelection(media.imdbId)"
+        @click="toggleMediaSelection(media)"
       >
         <figure class="relative">
           <NuxtImg
@@ -200,7 +207,7 @@ const pages = computed(() => {
             </template>
           </NuxtImg>
           <div
-            v-if="selection.includes(media.imdbId)"
+            v-if="selection.map((x) => x.mediaId).includes(media.imdbId)"
             class="absolute inset-0 rounded-md ring-2 ring-primary"
           >
             <div class="flex m-2">

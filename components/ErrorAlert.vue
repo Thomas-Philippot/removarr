@@ -1,4 +1,12 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+const props = defineProps({
+  error: {
+    type: Object,
+    required: false,
+    default: null,
+  },
+});
+</script>
 
 <template>
   <div role="alert" class="alert alert-error alert-soft mt-4">
@@ -17,7 +25,10 @@
     </svg>
     <div>
       <h3 class="font-bold">{{ $t("media_loading_failed") }}</h3>
-      <div class="text-xs">{{ $t("check_servarr_settings") }}</div>
+      <div v-if="props.error">
+        {{ error }}
+      </div>
+      <div v-else class="text-xs">{{ $t("check_servarr_settings") }}</div>
     </div>
     <NuxtLink as="button" class="btn btn-dash" to="/settings">{{
       $t("settings")

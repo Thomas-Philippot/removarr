@@ -25,7 +25,11 @@ const props = defineProps({
   },
 });
 
-const { data: medias, status } = await useAsyncData(
+const {
+  data: medias,
+  status,
+  error,
+} = await useAsyncData(
   props.mediaType,
   async () => {
     const data = await $fetch<MediaResponse>(props.url);
@@ -57,7 +61,8 @@ const page = ref(1);
 
 async function toggleMediaSelection(media: Media) {
   if (selection.value.map((x) => x.mediaId).includes(media.imdbId)) {
-    const index = selection.value.indexOf(media);
+    const index = selection.value.map((x) => x.mediaId).indexOf(media.imdbId);
+    console.log(index);
     selection.value.splice(index, 1);
   } else {
     selection.value.push({ mediaId: media.imdbId, servarrId: media.id });
@@ -257,8 +262,8 @@ const pages = computed(() => {
       <div></div>
     </div>
   </div>
-  <div v-if="status === 'error'">
-    <ErrorAlert />
+  <div v-if="error">
+    <ErrorAlert :error="error" />
   </div>
 </template>
 

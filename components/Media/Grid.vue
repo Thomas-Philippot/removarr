@@ -62,7 +62,6 @@ const page = ref(1);
 async function toggleMediaSelection(media: Media) {
   if (selection.value.map((x) => x.mediaId).includes(media.imdbId)) {
     const index = selection.value.map((x) => x.mediaId).indexOf(media.imdbId);
-    console.log(index);
     selection.value.splice(index, 1);
   } else {
     selection.value.push({ mediaId: media.imdbId, servarrId: media.id });

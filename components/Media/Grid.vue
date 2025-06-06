@@ -36,7 +36,9 @@ const {
     const plexSettings = await $fetch(`/api/settings/plex`);
 
     if (!plexSettings.filter) {
-      return data.filter((x) => x.statistics.sizeOnDisk > 0);
+      return data.filter(
+        (x) => !x.statistics.sizeOnDisk || x.statistics.sizeOnDisk > 0,
+      );
     }
 
     const filteredPath = plexSettings.libraries
@@ -47,7 +49,7 @@ const {
       .filter((media) => {
         return filteredPath.some((path) => path.includes(media.rootFolderPath));
       })
-      .filter((x) => x.statistics.sizeOnDisk > 0);
+      .filter((x) => !x.statistics.sizeOnDisk || x.statistics.sizeOnDisk > 0);
   },
   { lazy: true },
 );

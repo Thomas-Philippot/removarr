@@ -18,7 +18,7 @@ export interface OriginalLanguage {
 }
 
 export interface Statistics {
-  sizeOnDisk: number;
+  sizeOnDisk?: number;
   releaseGroups: string[];
   seasonCount?: number;
   episodeFileCount?: number;

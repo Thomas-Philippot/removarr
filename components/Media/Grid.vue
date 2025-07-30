@@ -54,14 +54,22 @@ const {
   { lazy: true },
 );
 
+onMounted(async () => {
+  fetchUserVotes();
+});
+
 const { data: user } = useAuth();
 
 const selectAll = ref(false);
 const selection = ref<Vote[]>([]);
+const userVotes = ref<string[]>([]);
 const itemsPerPage = ref(30);
 const page = ref(1);
 
 async function toggleMediaSelection(media: Media) {
+  if (userVotes.value.includes(media.imdbId)) {
+    return;
+  }
   if (selection.value.map((x) => x.mediaId).includes(media.imdbId)) {
     const index = selection.value.map((x) => x.mediaId).indexOf(media.imdbId);
     selection.value.splice(index, 1);
@@ -75,12 +83,21 @@ async function toggleSelectAll() {
     return;
   }
   if (selectAll.value) {
-    selection.value = medias.value.map((x) => {
-      return { mediaId: x.imdbId, servarrId: x.id };
-    });
+    selection.value = medias.value
+      .filter((media) => !userVotes.value.includes(media.imdbId))
+      .map((x) => {
+        return { mediaId: x.imdbId, servarrId: x.id };
+      });
   } else {
     selection.value = [];
   }
+}
+
+async function fetchUserVotes() {
+  const res = await $fetch(
+    `/api/votes/user/${user.value?.id}?mediaType=${props.mediaType}`,
+  );
+  userVotes.value = res.map((x) => x.mediaId);
 }
 
 async function sendVote() {
@@ -95,6 +112,7 @@ async function sendVote() {
     });
     selection.value = [];
     showToast("alert alert-success", t("vote_registered"));
+    fetchUserVotes();
   }
 }
 
@@ -194,7 +212,11 @@ const pages = computed(() => {
       <li
         v-for="media in paginatedItems"
         :key="media.id"
-        class="shadow-sm cursor-pointer transform-gpu transition duration-300 hover:scale-105"
+        :class="
+          userVotes.includes(media.imdbId)
+            ? ''
+            : 'shadow-sm cursor-pointer transform-gpu transition duration-300 hover:scale-105'
+        "
         @click="toggleMediaSelection(media)"
       >
         <figure class="relative">
@@ -204,6 +226,7 @@ const pages = computed(() => {
             "
             :alt="`${media.title}`"
             class="rounded-md aspect-2/3"
+            :class="userVotes.includes(media.imdbId) ? 'brightness-75' : ''"
             loading="lazy"
             custom
           >
@@ -212,6 +235,18 @@ const pages = computed(() => {
               <div v-else class="skeleton" v-bind="imgAttrs" />
             </template>
           </NuxtImg>
+          <div
+            v-if="userVotes.includes(media.imdbId)"
+            class="absolute inset-0 rounded-md ring-2 ring-success"
+          >
+            <div class="flex m-2 right-2">
+              <input
+                type="checkbox"
+                checked
+                class="checkbox checkbox-success rounded-full"
+              />
+            </div>
+          </div>
           <div
             v-if="selection.map((x) => x.mediaId).includes(media.imdbId)"
             class="absolute inset-0 rounded-md ring-2 ring-primary"

@@ -37,7 +37,7 @@ const {
 
     if (!plexSettings.filter) {
       return data.filter(
-        (x) => !x.statistics.sizeOnDisk || x.statistics.sizeOnDisk > 0,
+        (x) => x.statistics?.sizeOnDisk && x.statistics.sizeOnDisk > 0,
       );
     }
 
@@ -49,7 +49,7 @@ const {
       .filter((media) => {
         return filteredPath.some((path) => path.includes(media.rootFolderPath));
       })
-      .filter((x) => !x.statistics.sizeOnDisk || x.statistics.sizeOnDisk > 0);
+      .filter((x) => x.statistics?.sizeOnDisk && x.statistics.sizeOnDisk > 0);
   },
   { lazy: true },
 );

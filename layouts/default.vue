@@ -57,7 +57,7 @@ function closeDrawer() {
           <UserMenu />
         </div>
       </div>
-      <div class="p-4">
+      <div class="p-4 pb-16 sm:pb-4">
         <slot />
       </div>
     </div>

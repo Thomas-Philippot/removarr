@@ -162,6 +162,7 @@ export interface Movie extends Media {
   digitalRelease: string;
   releaseDate: string;
   website: string;
+  sizeOnDisk: number;
   youTubeTrailerId: string;
   studio: string;
   hasFile: boolean;
@@ -184,4 +185,4 @@ export interface TVShow extends Media {
   useSceneNumbering: boolean;
 }
 
-export type MediaResponse = Media[];
+export type MediaResponse = Movie[] | TVShow[];

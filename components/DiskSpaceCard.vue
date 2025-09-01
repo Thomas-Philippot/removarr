@@ -10,6 +10,14 @@ const { data, status, error } = useFetch<DiskSpaceItem[]>(
   "/radarr/api/v3/diskspace",
 );
 
+const { data: settings } = useFetch("/api/settings/app");
+
+const filteredData = computed(() => {
+  let items = settings.value?.storageFilteredPaths.split(",");
+  items = items?.map((x) => x.trim());
+  return data.value?.filter((x) => !items?.includes(x.path));
+});
+
 function formatBytes(bytes: number, decimals = 2) {
   if (!+bytes) return "0 Bytes";
 
@@ -58,9 +66,13 @@ function getStatusColor(item: DiskSpaceItem) {
         </div>
       </div>
     </div>
-    <div v-if="status === 'success'">
+    <div v-if="status === 'success' && settings && data">
       <div class="flex flex-col gap-4">
-        <div v-for="(item, key) in data" :key="key" class="flex flex-col">
+        <div
+          v-for="(item, key) in filteredData"
+          :key="key"
+          class="flex flex-col"
+        >
           <div class="font-semibold">{{ item.path }}</div>
           <div class="flex gap-4 items-center justify-between">
             <progress

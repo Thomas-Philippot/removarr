@@ -24,20 +24,39 @@ function showToast(type: string, message: string) {
   <div class="prose">
     <h1>{{ $t("settings") }}</h1>
   </div>
-  <fieldset
-    class="fieldset bg-base-200 border-base-300 rounded-box w-full md:w-xs border p-4 mb-6"
-  >
-    <legend class="fieldset-legend">{{ $t("interface") }}</legend>
-    <label class="label">{{ $t("language") }}</label>
-    <select v-model="currentLocal" class="select w-full">
-      <option v-for="item in locales" :key="item.code" :value="item.code">
-        {{ item.name }}
-      </option>
-    </select>
-    <button class="btn btn-primary mt-4" @click="saveSettings">
-      {{ $t("save") }}
-    </button>
-  </fieldset>
+  <!-- name of each tab group should be unique -->
+  <div class="tabs tabs-lift my-4">
+    <input
+      type="radio"
+      name="settings_tabs"
+      class="tab"
+      :aria-label="$t('main')"
+      checked
+    />
+    <div class="tab-content bg-base-100 border-base-300 p-6">
+      <AppSettings @save="onSettingsSaved" />
+    </div>
+
+    <input
+      type="radio"
+      name="settings_tabs"
+      class="tab"
+      :aria-label="$t('interface')"
+    />
+    <div class="tab-content bg-base-100 border-base-300 p-6">
+      <fieldset class="fieldset w-full md:w-xs">
+        <label class="label">{{ $t("language") }}</label>
+        <select v-model="currentLocal" class="select w-full">
+          <option v-for="item in locales" :key="item.code" :value="item.code">
+            {{ item.name }}
+          </option>
+        </select>
+        <button class="btn btn-primary mt-4" @click="saveSettings">
+          {{ $t("save") }}
+        </button>
+      </fieldset>
+    </div>
+  </div>
   <div class="prose">
     <h2>{{ $t("applications") }}</h2>
     <p>{{ $t("application_settings") }}</p>

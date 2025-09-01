@@ -41,6 +41,9 @@ export interface PlexLibrary {
 }
 
 export interface MainSettings {
+  app: {
+    storageFilteredPaths: string;
+  };
   plex: PlexSettings;
   radarr: DVRSettings;
   sonarr: DVRSettings;
@@ -52,6 +55,9 @@ class Settings {
 
   constructor(initialSettings?: MainSettings) {
     this.data = {
+      app: {
+        storageFilteredPaths: "",
+      },
       plex: {
         mode: "hostname",
         schema: "http://",

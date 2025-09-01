@@ -57,5 +57,8 @@
   "check_servarr_settings": "Vérifier vos paramètres Radarr et Sonarr",
   "items_per_page": "Items par page",
   "libraries_filter": "Filtre par bibliothèques",
-  "settings_saved": "Paramètres sauvegarder"
+  "settings_saved": "Paramètres sauvegarder",
+  "filtered-directories": "Dossier à cacher",
+  "filtered-directories-description": "Une liste de dossier séparer par une virgule de dossier à ne pas afficher dans section Stockage.",
+  "main": "Général"
 }

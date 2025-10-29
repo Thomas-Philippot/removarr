@@ -24,7 +24,7 @@
     "@nuxt/image": "^1.10.0",
     "@nuxtjs/i18n": "^9.5.4",
     "@vite-pwa/nuxt": "^1.0.1",
-    "better-sqlite3": "^11.10.0",
+    "better-sqlite3": "^12.4.1",
     "bowser": "^2.11.0",
     "drizzle-orm": "^0.43.1",
     "lodash": "^4.17.21",
@@ -36,7 +36,7 @@
   "devDependencies": {
     "@catppuccin/daisyui": "^2.1.1",
     "@cssninja/nuxt-toaster": "^0.3.12",
-    "@sidebase/nuxt-auth": "^0.10.1",
+    "@sidebase/nuxt-auth": "^1.1.0",
     "@tailwindcss/typography": "^0.5.16",
     "@tailwindcss/vite": "^4.1.6",
     "@types/better-sqlite3": "^7.6.13",

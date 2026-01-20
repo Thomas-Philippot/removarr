@@ -1,6 +1,6 @@
 import {
   getSettings,
-  type PlexLibrary,
+  type MediaLibrary,
 } from "~/server/repository/settingRepository";
 import PlexApi from "plex-api";
 import { randomUUID } from "crypto";
@@ -48,15 +48,15 @@ export default defineEventHandler(async (event) => {
   const data = await readBody(event);
   const token = data.token;
 
-  let hostname = settings.main.plex.hostname;
-  if (settings.main.plex.mode === "ip") {
-    hostname = settings.main.plex.ip;
+  let hostname = settings.main.mediaServer.hostname;
+  if (settings.main.mediaServer.mode === "ip") {
+    hostname = settings.main.mediaServer.ip;
   }
 
   const client = new PlexApi({
     hostname,
-    port: settings.main.plex.port,
-    https: settings.main.plex.schema === "https://",
+    port: settings.main.mediaServer.port,
+    https: settings.main.mediaServer.schema === "https://",
     token,
     authenticator: {
       authenticate: (
@@ -80,12 +80,12 @@ export default defineEventHandler(async (event) => {
     },
   });
 
-  if (!settings.main.plex.api_uuid) {
-    settings.main.plex.api_uuid = randomUUID();
+  if (!settings.main.mediaServer.api_uuid) {
+    settings.main.mediaServer.api_uuid = randomUUID();
   }
 
   if (data.token) {
-    settings.main.plex.auth_token = data.token;
+    settings.main.mediaServer.apiKey = data.token;
   }
 
   const status = await client.query("/");
@@ -96,7 +96,7 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  settings.main.plex.machineId = status.MediaContainer.machineIdentifier;
+  settings.main.mediaServer.machineId = status.MediaContainer.machineIdentifier;
 
   settings.save();
 
@@ -104,13 +104,13 @@ export default defineEventHandler(async (event) => {
     const response: PlexResponse = await client.query("/library/sections");
     const libraries = response.MediaContainer.Directory;
 
-    settings.main.plex.libraries = libraries
+    settings.main.mediaServer.libraries = libraries
       // Remove setup that are not movie or show
       .filter((library) => library.type === "movie" || library.type === "show")
       // Remove setup that do not have a metadata agent set (usually personal video setup)
       .filter((library) => library.agent !== "com.plexapp.agents.none")
       .map((library) => {
-        const existing = settings.main.plex.libraries.find(
+        const existing = settings.main.mediaServer.libraries.find(
           (l) => l.id === library.key && l.name === library.title,
         );
 
@@ -120,7 +120,7 @@ export default defineEventHandler(async (event) => {
           enabled: existing?.enabled ?? true,
           type: library.type,
           path: library.Location[0].path,
-        } as PlexLibrary;
+        } as MediaLibrary;
       });
     settings.save();
   } catch (error) {

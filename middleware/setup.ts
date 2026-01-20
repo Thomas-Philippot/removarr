@@ -4,10 +4,12 @@ export default defineNuxtRouteMiddleware(async () => {
   const settings = await $fetch<MainSettings>("/api/settings");
   const { data } = useAuth();
   if (
-    !settings.radarr.hostname ||
-    !settings.radarr.apiKey ||
-    !settings.sonarr.hostname ||
-    !settings.sonarr.apiKey
+    (!settings.radarr.hostname &&
+      !settings.radarr.ip &&
+      !settings.radarr.apiKey) ||
+    (!settings.sonarr.hostname &&
+      !settings.sonarr.ip &&
+      !settings.sonarr.apiKey)
   ) {
     if (data.value && data.value.role === "user") {
       // set user as admin

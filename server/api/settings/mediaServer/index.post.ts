@@ -5,7 +5,7 @@ export default defineEventHandler(async (event) => {
   const settings = getSettings().load();
   const data = await readBody(event);
 
-  settings.main.plex = merge(settings.main.plex, data);
+  settings.main.mediaServer = merge(settings.main.mediaServer, data);
   settings.save();
-  return settings.main.plex;
+  return settings.main.mediaServer;
 });

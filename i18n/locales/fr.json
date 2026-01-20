@@ -1,6 +1,6 @@
 {
   "welcome": "Bienvenue sur removarr",
-  "start_with": "Pour commencer connect toi avec ton compte plex",
+  "start_with": "Pour commencer choisie ton type de serveur multimedia, puis connecte-toi.",
   "settings": "Paramètres",
   "language": "Langue",
   "movies": "Films",
@@ -60,5 +60,8 @@
   "settings_saved": "Paramètres sauvegarder",
   "filtered-directories": "Dossier à cacher",
   "filtered-directories-description": "Une liste de dossier séparer par une virgule de dossier à ne pas afficher dans section Stockage.",
-  "main": "Général"
+  "main": "Général",
+  "type:": "Type:",
+  "user": "Utilisateur",
+  "password": "Mot de passe"
 }

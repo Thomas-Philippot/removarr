@@ -19,20 +19,22 @@ export interface DVRSettings {
   apiKey: string | null;
 }
 
-export interface PlexSettings {
+export interface MediaServerSettings {
+  type: "plex" | "jellyfin";
   mode: "hostname" | "ip";
   schema: "http://" | "https://";
   hostname: string | null;
   ip: string | null;
   port: number;
-  libraries: PlexLibrary[];
+  libraries: MediaLibrary[];
   filter: boolean;
   api_uuid: string | null;
+  apiKey?: string;
   auth_token?: string;
   machineId?: string | null;
 }
 
-export interface PlexLibrary {
+export interface MediaLibrary {
   id: string;
   name: string;
   enabled: boolean;
@@ -44,7 +46,7 @@ export interface MainSettings {
   app: {
     storageFilteredPaths: string;
   };
-  plex: PlexSettings;
+  mediaServer: MediaServerSettings;
   radarr: DVRSettings;
   sonarr: DVRSettings;
   overseerr: DVRSettings;
@@ -58,7 +60,8 @@ class Settings {
       app: {
         storageFilteredPaths: "",
       },
-      plex: {
+      mediaServer: {
+        type: "plex",
         mode: "hostname",
         schema: "http://",
         hostname: null,
@@ -67,6 +70,7 @@ class Settings {
         libraries: [],
         filter: false,
         api_uuid: null,
+        auth_token: null,
       },
       radarr: {
         mode: "hostname",

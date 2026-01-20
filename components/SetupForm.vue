@@ -20,16 +20,18 @@ const step = ref(0);
 async function nextStep() {
   try {
     if (step.value === 0 && settings.value) {
-      await $fetch("/api/settings/plex", {
+      await $fetch("/api/settings/mediaServer", {
         method: "POST",
-        body: settings.value.plex,
+        body: settings.value.mediaServer,
       });
-      await $fetch("/api/plex/setup", {
-        method: "POST",
-        body: {
-          token: token.value,
-        },
-      });
+      if (settings.value.mediaServer.type === "plex") {
+        await $fetch("/api/plex/setup", {
+          method: "POST",
+          body: {
+            token: token.value,
+          },
+        });
+      }
     }
     if (step.value > 0) {
       await saveCurrentSettings();
@@ -42,7 +44,7 @@ async function nextStep() {
 }
 
 async function saveCurrentSettings() {
-  if (!settings.value) return;
+  if (!settings.value || step.value === 0) return;
   const currentSetting = settings.value[currentServarr[step.value]];
   if (!currentSetting.hostname || !currentSetting.apiKey) {
     return;
@@ -57,16 +59,6 @@ function showToast(type: string, message: string) {
   const { $nt } = useNuxtApp();
   $nt.show(() => h(AppToast, { type, message }));
 }
-
-async function ping() {
-  await saveCurrentSettings();
-  const { error } = await useFetch(`/${currentServarr[step.value]}/ping`);
-  if (error.value) {
-    showToast("alert alert-error", t("server_connexion_failed"));
-    return;
-  }
-  showToast("alert alert-success", t("server_connexion_success"));
-}
 </script>
 
 <template>
@@ -79,11 +71,11 @@ async function ping() {
           <li :class="`step ${step >= 0 ? 'step-primary' : ''}`">
             <span class="step-icon">
               <NuxtImg
-                src="/images/plex.svg"
-                alt="plex logo"
+                :src="`/images/${settings.mediaServer.type}.svg`"
+                alt="media server icon"
                 class="p-1"
               /> </span
-            >Plex
+            >{{ settings.mediaServer.type === "plex" ? "Plex" : "Jellyfin" }}
           </li>
           <li :class="`step ${step > 0 ? 'step-primary' : ''}`">
             <span class="step-icon">
@@ -108,149 +100,45 @@ async function ping() {
           </li>
         </ul>
         <div v-if="step === 0">
-          <h3 class="text-lg font-bold">{{ $t("configure") }} Plex</h3>
-          <div role="tablist" class="tabs tabs-border mt-6 mb-2">
-            <a
-              role="tab"
-              :class="`tab ${settings.plex.mode === 'ip' ? 'tab-active' : ''}`"
-              @click="settings.plex.mode = 'ip'"
-            >
-              {{ $t("ip") }} / {{ $t("port") }}
-            </a>
-            <a
-              role="tab"
-              :class="`tab ${settings.plex.mode === 'hostname' ? 'tab-active' : ''}`"
-              @click="settings.plex.mode = 'hostname'"
-            >
-              {{ $t("hostname") }}
-            </a>
+          <h3 class="text-lg font-bold">{{ $t("configure") }} Media Server</h3>
+          <fieldset class="fieldset">
+            <label class="label">{{ $t("type") }}</label>
+            <select v-model="settings.mediaServer.type" class="select">
+              <option value="plex">Plex</option>
+              <option value="jellyfin">Jellyfin</option>
+            </select>
+          </fieldset>
+          <div v-if="settings.mediaServer.type === 'plex'">
+            <ServarrSettingsForm
+              v-model="settings.mediaServer"
+              servarr="mediaServer"
+              hide-title
+              hide-previous-button
+              hide-test-button
+              no-api-key
+              @next="nextStep"
+              @previous="step--"
+            />
           </div>
-          <div v-if="settings.plex.mode === 'hostname'">
-            <fieldset class="fieldset">
-              <label class="label">{{ $t("hostname") }}</label>
-              <label class="input validator w-full">
-                <select v-model="settings.plex.schema">
-                  <option value="https://">Https://</option>
-                  <option value="http://">Http://</option>
-                </select>
-                <input
-                  v-model="settings.plex.hostname"
-                  required
-                  class="grow"
-                  placeholder=""
-                />
-              </label>
-            </fieldset>
-          </div>
-          <div v-else>
-            <fieldset class="fieldset">
-              <label class="label">{{ $t("ip") }}</label>
-              <label class="input validator w-full">
-                <select v-model="settings.plex.schema">
-                  <option value="https://">Https://</option>
-                  <option value="http://">Http://</option>
-                </select>
-                <input
-                  v-model="settings.plex.ip"
-                  required
-                  class="grow"
-                  placeholder=""
-                />
-              </label>
-              <label class="label">{{ $t("port") }}</label>
-              <input
-                v-model="settings.plex.port"
-                required
-                minlength="2"
-                type="text"
-                class="input validator w-full"
-                placeholder="32400"
-              />
-            </fieldset>
+          <div v-if="settings.mediaServer.type === 'jellyfin'">
+            <ServarrSettingsForm
+              v-model="settings.mediaServer"
+              servarr="mediaServer"
+              hide-title
+              hide-previous-button
+              ping-url="System/Ping"
+              @next="nextStep"
+              @previous="step--"
+            />
           </div>
         </div>
         <div v-if="step > 0 && step < 3">
-          <h3 class="text-lg font-bold">
-            {{ $t("configure") }} {{ currentServarr[step] }} {{ $t("server") }}
-          </h3>
-          <div role="tablist" class="tabs tabs-border mt-6 mb-2">
-            <a
-              role="tab"
-              :class="`tab ${settings[currentServarr[step]].mode === 'ip' ? 'tab-active' : ''}`"
-              @click="settings[currentServarr[step]].mode = 'ip'"
-            >
-              {{ $t("ip") }} / {{ $t("port") }}
-            </a>
-            <a
-              role="tab"
-              :class="`tab ${settings[currentServarr[step]].mode === 'hostname' ? 'tab-active' : ''}`"
-              @click="settings[currentServarr[step]].mode = 'hostname'"
-            >
-              {{ $t("hostname") }}
-            </a>
-          </div>
-          <div v-if="settings[currentServarr[step]].mode === 'hostname'">
-            <fieldset class="fieldset">
-              <label class="label">{{ $t("hostname") }}</label>
-              <label class="input validator w-full">
-                <select v-model="settings[currentServarr[step]].schema">
-                  <option value="https://">Https://</option>
-                  <option value="http://">Http://</option>
-                </select>
-                <input
-                  v-model="settings[currentServarr[step]].hostname"
-                  required
-                  class="grow"
-                  placeholder=""
-                />
-              </label>
-
-              <label class="label">{{ $t("api_key") }}</label>
-              <input
-                v-model="settings[currentServarr[step]].apiKey"
-                required
-                type="text"
-                class="input validator w-full"
-                placeholder=""
-              />
-            </fieldset>
-          </div>
-          <div v-else>
-            <fieldset class="fieldset">
-              <label class="label">{{ $t("ip") }}</label>
-              <label class="input validator w-full">
-                <select v-model="settings[currentServarr[step]].schema">
-                  <option value="https://">Https://</option>
-                  <option value="http://">Http://</option>
-                </select>
-                <input
-                  v-model="settings[currentServarr[step]].ip"
-                  required
-                  class="grow"
-                  placeholder=""
-                />
-              </label>
-
-              <label class="label">{{ $t("port") }}</label>
-              <input
-                v-model="settings[currentServarr[step]].port"
-                required
-                minlength="2"
-                type="text"
-                class="input validator w-full"
-                placeholder="7878"
-              />
-
-              <label class="label">{{ $t("api_key") }}</label>
-              <input
-                v-model="settings[currentServarr[step]].apiKey"
-                required
-                type="text"
-                class="input validator w-full"
-                placeholder=""
-              />
-            </fieldset>
-          </div>
+          <ServarrSettingsForm
+            v-model="settings[currentServarr[step]]"
+            :servarr="currentServarr[step]"
+            @next="nextStep"
+            @previous="step--"
+          />
         </div>
         <div
           v-if="step > 2"
@@ -266,25 +154,14 @@ async function ping() {
           />
         </div>
         <div class="flex justify-between">
-          <div>
-            <button
-              v-if="step > 0 && step < 3"
-              class="btn btn-outline btn-warning"
-              @click="ping"
-            >
-              {{ $t("test") }}
-            </button>
-          </div>
+          <div></div>
           <div class="flex gap-2">
             <button
-              v-if="step > 0"
+              v-if="step > 2"
               class="btn btn-soft btn-accent"
               @click="step--"
             >
               {{ $t("previous") }}
-            </button>
-            <button v-if="step < 3" class="btn btn-primary" @click="nextStep">
-              {{ $t("next") }}
             </button>
             <NuxtLink
               v-if="step === 3"

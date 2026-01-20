@@ -9,6 +9,9 @@ export default defineEventHandler(async (event) => {
   if (key === "radarr" || key === "sonarr" || key === "overseerr") {
     return settings.main[key] as DVRSettings;
   }
+  if (key === "mediaServer") {
+    return settings.main.mediaServer;
+  }
   throw createError({
     statusCode: 400,
     statusMessage: "servarr not implemented",

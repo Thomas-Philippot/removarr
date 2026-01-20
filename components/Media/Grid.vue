@@ -33,15 +33,15 @@ const {
   props.mediaType,
   async () => {
     const data = await $fetch<MediaResponse>(props.url);
-    const plexSettings = await $fetch(`/api/settings/plex`);
+    const mediaSettings = await $fetch(`/api/settings/mediaServer`);
 
-    if (!plexSettings.filter) {
+    if (!mediaSettings.filter) {
       return data.filter(
         (x) => x.statistics?.sizeOnDisk && x.statistics.sizeOnDisk > 0,
       );
     }
 
-    const filteredPath = plexSettings.libraries
+    const filteredPath = mediaSettings.libraries
       .filter((x) => x.type === props.mediaType && x.enabled)
       .map((x) => x.path);
 

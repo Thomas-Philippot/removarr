@@ -1,6 +1,6 @@
 {
   "welcome": "Welcome to removarr",
-  "start_with": "Starts by login-in with your plex account",
+  "start_with": "Starts by chosing your media server type and connecting to it.",
   "settings": "Settings",
   "language": "Language",
   "movies": "Movies",
@@ -60,5 +60,8 @@
   "settings_saved": "Settings saved",
   "filtered-directories": "Filtered Directories",
   "filtered-directories-description": "A comma separated list of path you don't want to see on the storage section",
-  "main": "Main"
+  "main": "Main",
+  "type:": "Type:",
+  "user": "User",
+  "password": "Password"
 }

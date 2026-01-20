@@ -48,6 +48,11 @@ export default defineNuxtConfig({
           to: "/api/proxy/overseerr/**",
         },
       },
+      "/mediaServer/**": {
+        proxy: {
+          to: "/api/proxy/mediaServer/**",
+        },
+      },
     },
   },
   modules: [

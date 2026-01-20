@@ -36,7 +36,7 @@ export default defineEventHandler(async () => {
 
     const response = await $fetch("https://plex.tv/api/users", {
       headers: {
-        "X-Plex-Token": settings.main.plex.auth_token,
+        "X-Plex-Token": settings.main.mediaServer.apiKey,
       },
       responseType: "text",
     });

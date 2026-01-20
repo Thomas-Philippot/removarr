@@ -62,17 +62,17 @@ function showToast(type: string, message: string) {
     <p>{{ $t("application_settings") }}</p>
   </div>
   <div class="flex flex-wrap gap-6 pb-6">
-    <ServarrSettingsForm
+    <ServarrSettingsCard
       key="sonarr"
       servarr="sonarr"
       @save="onSettingsSaved"
     />
-    <ServarrSettingsForm
+    <ServarrSettingsCard
       key="radarr"
       servarr="radarr"
       @save="onSettingsSaved"
     />
-    <ServarrSettingsForm
+    <ServarrSettingsCard
       key="overseerr"
       servarr="overseerr"
       @save="onSettingsSaved"

@@ -1,10 +1,12 @@
 <script lang="ts" setup>
-const { data: plexSettings, status } = await useFetch(`/api/settings/plex`);
+const { data: plexSettings, status } = await useFetch(
+  `/api/settings/mediaServer`,
+);
 
 const emit = defineEmits(["save"]);
 
 async function saveSettings() {
-  await $fetch("/api/settings/plex", {
+  await $fetch("/api/settings/mediaServer", {
     method: "POST",
     body: plexSettings.value,
   });

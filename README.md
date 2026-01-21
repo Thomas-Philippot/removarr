@@ -1,6 +1,8 @@
 # Removarr
 
-Removarr allows users to vote for media to be deleted on a shared Plex/Jellyfin library
+Removarr allows users to vote for media to be deleted on a shared media library.
+
+It is built to work with your existing Plex/Jellyfin library.
 
 ## Features
 

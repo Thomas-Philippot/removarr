@@ -1,13 +1,14 @@
 # Removarr
 
-Removarr allow plex users to vote for media to be deleted on shared plex library
+Removarr allows users to vote for media to be deleted on a shared Plex/Jellyfin library
 
 ## Features
 
 - Plex integration :
   - User authentication
-  - User access
   - Enable/Disable libraries
+- Jellyfin integration :
+  - User authentication
 - Sonarr integration : list TV Shows from the enabled plex libraries
 - Radarr integration : list Movies from the enabled plex libraries
 - Display storage information to users

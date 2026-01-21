@@ -4,7 +4,7 @@ import { defineConfig } from "vitepress";
 export default defineConfig({
   title: "Removarr",
   base: "/removarr/",
-  description: "Media deletion tool for shared plex library",
+  description: "Media deletion tool for shared media library",
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     nav: [
@@ -23,7 +23,10 @@ export default defineConfig({
       },
       {
         text: "Support",
-        items: [{ text: "Version 2 upgrade", link: "/support/upgrade" }],
+        items: [
+          { text: "Version 2 upgrade", link: "/support/v2-upgrade" },
+          { text: "Version 3 upgrade", link: "/support/v3-upgrade" },
+        ],
       },
     ],
 

@@ -1,4 +1,4 @@
-FROM node:22.15.0-alpine AS build
+FROM node:24.18-alpine AS build
 
 LABEL authors="Thomas Philippot"
 
@@ -14,7 +14,7 @@ COPY . ./
 
 RUN npm run build
 
-FROM node:22.15.0-alpine AS prod
+FROM node:24.18-alpine AS prod
 
 USER node
 

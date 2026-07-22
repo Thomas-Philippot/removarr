@@ -23,9 +23,9 @@ WORKDIR /app
 ENV HOST=0.0.0.0
 ENV NODE_ENV=production
 
-COPY --from=build /app/.output ./.output
-COPY --from=build /app/config ./config
-COPY --from=build /app/server ./server
+COPY --from=build --chown=node:node /app/.output ./.output
+COPY --from=build --chown=node:node /app/config ./config
+COPY --from=build --chown=node:node /app/server ./server
 
 HEALTHCHECK --interval=10s --timeout=20s --start-period=5s --retries=3 \
   CMD wget --no-verbose --tries=1 --spider http://0.0.0.0:3000 || exit 1

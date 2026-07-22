@@ -1,6 +1,7 @@
 services:
   removarr:
     container_name: removarr
+    privileged: true
     build:
       context: .
     ports:

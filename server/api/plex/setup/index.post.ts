@@ -2,8 +2,8 @@ import {
   getSettings,
   type MediaLibrary,
 } from "~/server/repository/settingRepository";
-import xml2js from "xml2js";
 import { randomUUID } from "crypto";
+import xml2js from "xml2js";
 
 interface PlexStatusResponse {
   MediaContainer: {
@@ -92,6 +92,7 @@ export default defineEventHandler(async (event) => {
         "X-Plex-Platform": "Removarr",
         "X-Plex-Product": "Removarr",
       },
+      retry: 0,
       responseType: "text",
     });
 

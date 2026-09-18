@@ -68,6 +68,8 @@ export default defineEventHandler(async (event) => {
   const settings = getSettings().load();
   const data = await readBody(event);
   const token = data.token;
+  const clientIdentifier =
+    data.uuid || settings.main.mediaServer.api_uuid || randomUUID();
 
   let hostname = settings.main.mediaServer.hostname;
   if (settings.main.mediaServer.mode === "ip") {
@@ -75,9 +77,7 @@ export default defineEventHandler(async (event) => {
   }
   const baseUrl = `${settings.main.mediaServer.schema}${hostname}:${settings.main.mediaServer.port}`;
 
-  if (!settings.main.mediaServer.api_uuid) {
-    settings.main.mediaServer.api_uuid = randomUUID();
-  }
+  settings.main.mediaServer.api_uuid = clientIdentifier;
 
   if (data.token) {
     settings.main.mediaServer.apiKey = data.token;
@@ -91,27 +91,24 @@ export default defineEventHandler(async (event) => {
       });
     }
 
-    const response = await $fetch.raw<string>(`${baseUrl}${path}`, {
+    const response = await fetch(`${baseUrl}${path}`, {
       headers: {
         "X-Plex-Token": token,
-        "X-Plex-Client-Identifier": settings.main.mediaServer.api_uuid!,
+        "X-Plex-Client-Identifier": clientIdentifier,
         "X-Plex-Device-Name": "Removarr",
         "X-Plex-Platform": "Removarr",
         "X-Plex-Product": "Removarr",
       },
-      ignoreResponseError: true,
-      retry: 0,
-      responseType: "text",
     });
 
-    if (!response.ok) {
+    if (!response.ok || !response.body) {
       throw createError({
         statusCode: response.status,
         statusMessage: response.statusText || "Plex Server error",
       });
     }
 
-    return (await xml2js.parseStringPromise(response._data, {
+    return (await xml2js.parseStringPromise(await response.text(), {
       explicitArray: false,
       mergeAttrs: true,
     })) as T;

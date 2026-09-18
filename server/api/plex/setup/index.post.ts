@@ -2,15 +2,21 @@ import {
   getSettings,
   type MediaLibrary,
 } from "~/server/repository/settingRepository";
-import PlexApi from "plex-api";
+import xml2js from "xml2js";
 import { randomUUID } from "crypto";
+
+interface PlexStatusResponse {
+  MediaContainer: {
+    machineIdentifier?: string;
+  };
+}
 
 export interface PlexResponse {
   MediaContainer: {
     size: number;
     allowSync: boolean;
     title1: string;
-    Directory: PlexLibraryResponse[];
+    Directory?: PlexLibraryResponse | PlexLibraryResponse[];
   };
 }
 
@@ -35,13 +41,21 @@ interface PlexLibraryResponse {
   directory: boolean;
   contentChangedAt: number;
   hidden: number;
-  Location: PlexLocationResponse[];
+  Location?: PlexLocationResponse | PlexLocationResponse[];
 }
 
 interface PlexLocationResponse {
   id: number;
   path: string;
 }
+
+const asArray = <T>(value?: T | T[]): T[] => {
+  if (!value) {
+    return [];
+  }
+
+  return Array.isArray(value) ? value : [value];
+};
 
 export default defineEventHandler(async (event) => {
   const settings = getSettings().load();
@@ -52,33 +66,7 @@ export default defineEventHandler(async (event) => {
   if (settings.main.mediaServer.mode === "ip") {
     hostname = settings.main.mediaServer.ip;
   }
-
-  const client = new PlexApi({
-    hostname,
-    port: settings.main.mediaServer.port,
-    https: settings.main.mediaServer.schema === "https://",
-    token,
-    authenticator: {
-      authenticate: (
-        _plexApi: PlexApi,
-        cb: (err?: string, token?: string) => void,
-      ) => {
-        if (!token) {
-          return cb("Plex Token not found!");
-        }
-        cb(undefined, token);
-      },
-    },
-    // requestOptions: {
-    //   includeChildren: 1,
-    // },
-    options: {
-      identifier: data.uuid,
-      product: "Removarr",
-      deviceName: "Removarr",
-      platform: "Removarr",
-    },
-  });
+  const baseUrl = `${settings.main.mediaServer.schema}${hostname}:${settings.main.mediaServer.port}`;
 
   if (!settings.main.mediaServer.api_uuid) {
     settings.main.mediaServer.api_uuid = randomUUID();
@@ -88,7 +76,32 @@ export default defineEventHandler(async (event) => {
     settings.main.mediaServer.apiKey = data.token;
   }
 
-  const status = await client.query("/");
+  const queryPlex = async <T>(path: string): Promise<T> => {
+    if (!token) {
+      throw createError({
+        statusCode: 400,
+        statusMessage: "Plex Token not found!",
+      });
+    }
+
+    const response = await $fetch(`${baseUrl}${path}`, {
+      headers: {
+        "X-Plex-Token": token,
+        "X-Plex-Client-Identifier": settings.main.mediaServer.api_uuid!,
+        "X-Plex-Device-Name": "Removarr",
+        "X-Plex-Platform": "Removarr",
+        "X-Plex-Product": "Removarr",
+      },
+      responseType: "text",
+    });
+
+    return (await xml2js.parseStringPromise(response, {
+      explicitArray: false,
+      mergeAttrs: true,
+    })) as T;
+  };
+
+  const status = await queryPlex<PlexStatusResponse>("/");
   if (!status?.MediaContainer?.machineIdentifier) {
     throw createError({
       statusCode: 400,
@@ -101,14 +114,19 @@ export default defineEventHandler(async (event) => {
   settings.save();
 
   try {
-    const response: PlexResponse = await client.query("/library/sections");
-    const libraries = response.MediaContainer.Directory;
+    const response = await queryPlex<PlexResponse>("/library/sections");
+    const libraries = asArray(response.MediaContainer.Directory);
 
     settings.main.mediaServer.libraries = libraries
       // Remove setup that are not movie or show
       .filter((library) => library.type === "movie" || library.type === "show")
       // Remove setup that do not have a metadata agent set (usually personal video setup)
       .filter((library) => library.agent !== "com.plexapp.agents.none")
+      .map((library) => ({
+        ...library,
+        Location: asArray(library.Location),
+      }))
+      .filter((library) => library.Location.length > 0)
       .map((library) => {
         const existing = settings.main.mediaServer.libraries.find(
           (l) => l.id === library.key && l.name === library.title,

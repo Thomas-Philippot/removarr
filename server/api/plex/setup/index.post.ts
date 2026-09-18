@@ -49,6 +49,13 @@ interface PlexLocationResponse {
   path: string;
 }
 
+interface NormalizedPlexLibraryResponse extends Omit<
+  PlexLibraryResponse,
+  "Location"
+> {
+  Location: PlexLocationResponse[];
+}
+
 const asArray = <T>(value?: T | T[]): T[] => {
   if (!value) {
     return [];
@@ -84,7 +91,7 @@ export default defineEventHandler(async (event) => {
       });
     }
 
-    const response = await $fetch(`${baseUrl}${path}`, {
+    const response = await $fetch.raw<string>(`${baseUrl}${path}`, {
       headers: {
         "X-Plex-Token": token,
         "X-Plex-Client-Identifier": settings.main.mediaServer.api_uuid!,
@@ -92,11 +99,19 @@ export default defineEventHandler(async (event) => {
         "X-Plex-Platform": "Removarr",
         "X-Plex-Product": "Removarr",
       },
+      ignoreResponseError: true,
       retry: 0,
       responseType: "text",
     });
 
-    return (await xml2js.parseStringPromise(response, {
+    if (!response.ok) {
+      throw createError({
+        statusCode: response.status,
+        statusMessage: response.statusText || "Plex Server error",
+      });
+    }
+
+    return (await xml2js.parseStringPromise(response._data, {
       explicitArray: false,
       mergeAttrs: true,
     })) as T;
@@ -117,17 +132,18 @@ export default defineEventHandler(async (event) => {
   try {
     const response = await queryPlex<PlexResponse>("/library/sections");
     const libraries = asArray(response.MediaContainer.Directory);
-
-    settings.main.mediaServer.libraries = libraries
-      // Remove setup that are not movie or show
-      .filter((library) => library.type === "movie" || library.type === "show")
-      // Remove setup that do not have a metadata agent set (usually personal video setup)
-      .filter((library) => library.agent !== "com.plexapp.agents.none")
+    const normalizedLibraries: NormalizedPlexLibraryResponse[] = libraries
       .map((library) => ({
         ...library,
         Location: asArray(library.Location),
       }))
-      .filter((library) => library.Location.length > 0)
+      .filter((library) => library.Location.length > 0);
+
+    settings.main.mediaServer.libraries = normalizedLibraries
+      // Remove setup that are not movie or show
+      .filter((library) => library.type === "movie" || library.type === "show")
+      // Remove setup that do not have a metadata agent set (usually personal video setup)
+      .filter((library) => library.agent !== "com.plexapp.agents.none")
       .map((library) => {
         const existing = settings.main.mediaServer.libraries.find(
           (l) => l.id === library.key && l.name === library.title,

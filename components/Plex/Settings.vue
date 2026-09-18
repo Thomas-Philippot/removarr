@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 const { data: plexSettings, status } = await useFetch(
   `/api/settings/mediaServer`,
+  { deep: true },
 );
 
 const emit = defineEmits(["save"]);

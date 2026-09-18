@@ -12,6 +12,7 @@ const props = defineProps({
 
 const { data: settings } = useFetch<DVRSettings>(
   `/api/settings/${props.servarr}`,
+  { deep: true },
 );
 
 function openModal() {

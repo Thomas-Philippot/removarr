@@ -64,13 +64,15 @@ async function sendRemove() {
       deleteFiles: deleteFiles.value,
     },
   });
-  for (const item of selection.value) {
-    const media = data.value.medias.find(
-      (x) => x.imdbId == votes.value.find((x) => x.servarrId == item).mediaId,
-    );
-    const index = data.value.medias.indexOf(media);
-    data.value.medias.splice(index, 1);
-  }
+  const removedMediaIds = selection.value.map(
+    (item) => votes.value.find((x) => x.servarrId == item)?.mediaId,
+  );
+  data.value = {
+    ...data.value,
+    medias: data.value.medias.filter(
+      (x) => !removedMediaIds.includes(x.imdbId),
+    ),
+  };
   selection.value = [];
   deleteFiles.value = true;
   const modal = document.getElementById(`remove_modal`);

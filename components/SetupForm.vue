@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import AppToast from "~/components/AppToast.vue";
 
-const { data: settings } = useFetch("/api/settings");
+const { data: settings } = useFetch("/api/settings", { deep: true });
 const { token } = useAuth();
 const { t } = useI18n();
 

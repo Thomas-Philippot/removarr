@@ -23,8 +23,10 @@ async function deleteVote(vote: Vote) {
   await $fetch(`/api/votes/media/${vote.mediaId}/${vote.userId}`, {
     method: "DELETE",
   });
-  const index = data.value.votes.indexOf(vote);
-  data.value.votes.splice(index, 1);
+  data.value = {
+    ...data.value,
+    votes: data.value.votes.filter((x) => x !== vote),
+  };
 }
 </script>
 

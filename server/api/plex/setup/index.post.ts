@@ -101,7 +101,7 @@ export default defineEventHandler(async (event) => {
       },
     });
 
-    if (!response.ok || !response.body) {
+    if (!response.ok) {
       throw createError({
         statusCode: response.status,
         statusMessage: response.statusText || "Plex Server error",

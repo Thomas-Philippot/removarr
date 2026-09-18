@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { DVRSettings } from "~/server/repository/settingRepository";
+import type { DVRSettings } from "~~/server/repository/settingRepository";
 
 const emits = defineEmits(["save"]);
 

@@ -1,5 +1,5 @@
-import { getSettings } from "~/server/repository/settingRepository";
-import type { User } from "~/server/database/schema";
+import { getSettings } from "~~/server/repository/settingRepository";
+import type { User } from "~~/server/database/schema";
 interface PlexUserResponse {
   user: {
     id: number;

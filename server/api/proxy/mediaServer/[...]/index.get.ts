@@ -1,4 +1,4 @@
-import { getSettings } from "~/server/repository/settingRepository";
+import { getSettings } from "~~/server/repository/settingRepository";
 
 export default defineEventHandler(async (event) => {
   if (!event.context.params) {

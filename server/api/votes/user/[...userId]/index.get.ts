@@ -1,5 +1,5 @@
-import { db } from "~/server/database";
-import { vote } from "~/server/database/schema";
+import { db } from "~~/server/database";
+import { vote } from "~~/server/database/schema";
 import { eq, and } from "drizzle-orm";
 
 export default defineEventHandler(async (event) => {

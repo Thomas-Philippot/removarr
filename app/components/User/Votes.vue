@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Vote } from "~/server/database/schema";
+import type { Vote } from "~~/server/database/schema";
 
 const { data, status, error } = useAsyncData(
   "user_votes",

@@ -1,4 +1,4 @@
-import type { MainSettings } from "~/server/repository/settingRepository";
+import type { MainSettings } from "~~/server/repository/settingRepository";
 
 export default defineNuxtRouteMiddleware(async () => {
   const settings = await $fetch<MainSettings>("/api/settings");

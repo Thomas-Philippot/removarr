@@ -1,4 +1,4 @@
-import { getSettings } from "~/server/repository/settingRepository";
+import { getSettings } from "~~/server/repository/settingRepository";
 import merge from "lodash/merge";
 
 export default defineEventHandler(async (event) => {

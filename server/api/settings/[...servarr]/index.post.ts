@@ -1,7 +1,7 @@
 import {
   getSettings,
   type MainSettings,
-} from "~/server/repository/settingRepository";
+} from "~~/server/repository/settingRepository";
 import merge from "lodash/merge.js";
 
 export default defineEventHandler(async (event) => {

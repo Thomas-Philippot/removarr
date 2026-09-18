@@ -10,7 +10,9 @@ definePageMeta({
 const error = ref(false);
 const tab = ref(0);
 
-const { data: settings, status } = useFetch("/api/settings");
+const { data: settings, status } = useFetch("/api/settings", {
+  deep: true,
+});
 
 const setup = computed(() => {
   return !settings.value?.mediaServer.auth_token;

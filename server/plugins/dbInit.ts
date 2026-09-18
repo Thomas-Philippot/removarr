@@ -1,4 +1,4 @@
-import { runMigration } from "~/server/database";
+import { runMigration } from "~~/server/database";
 
 export default defineNitroPlugin(() => {
   runMigration();

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { DVRSettings } from "~/server/repository/settingRepository";
+import type { DVRSettings } from "~~/server/repository/settingRepository";
 
 const emits = defineEmits(["save"]);
 
@@ -12,6 +12,7 @@ const props = defineProps({
 
 const { data: settings } = useFetch<DVRSettings>(
   `/api/settings/${props.servarr}`,
+  { deep: true },
 );
 
 function openModal() {

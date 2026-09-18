@@ -1,5 +1,5 @@
-import { getSettings } from "~/server/repository/settingRepository";
-import type { User } from "~/server/database/schema";
+import { getSettings } from "~~/server/repository/settingRepository";
+import type { User } from "~~/server/database/schema";
 interface PlexUserResponse {
   user: {
     id: number;
@@ -74,8 +74,15 @@ export default defineEventHandler(async (event) => {
 
 async function getUser(settings, event) {
   if (settings.main.mediaServer.type === "plex") {
-    const response: PlexUserResponse = await event.$fetch(
+    // Only forward the Plex token: event.$fetch would forward every incoming
+    // header, including x-forwarded-proto, which makes plex.tv redirect in a loop.
+    const response: PlexUserResponse = await $fetch(
       "https://plex.tv/users/account.json",
+      {
+        headers: {
+          "X-Plex-Token": getRequestHeader(event, "x-plex-token") ?? "",
+        },
+      },
     );
     return {
       id: response.user.uuid,

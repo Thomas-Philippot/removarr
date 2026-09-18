@@ -1,5 +1,5 @@
-import { db } from "~/server/database";
-import { vote, user } from "~/server/database/schema";
+import { db } from "~~/server/database";
+import { vote, user } from "~~/server/database/schema";
 import { eq } from "drizzle-orm";
 
 type User = typeof user.$inferInsert;

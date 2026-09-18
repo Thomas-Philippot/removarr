@@ -5,7 +5,9 @@ const {
   data: settings,
   status,
   error,
-} = await useAsyncData("app-settings", () => $fetch("/api/settings/app"));
+} = await useAsyncData("app-settings", () => $fetch("/api/settings/app"), {
+  deep: true,
+});
 
 async function saveSettings() {
   await $fetch("/api/settings/app", {

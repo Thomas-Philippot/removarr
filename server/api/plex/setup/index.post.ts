@@ -1,7 +1,7 @@
 import {
   getSettings,
   type MediaLibrary,
-} from "~/server/repository/settingRepository";
+} from "~~/server/repository/settingRepository";
 import { randomUUID } from "crypto";
 import xml2js from "xml2js";
 

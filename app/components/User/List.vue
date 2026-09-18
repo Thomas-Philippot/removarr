@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { user } from "~/server/database/schema";
+import type { user } from "~~/server/database/schema";
 type User = typeof user.$inferInsert;
 
 const props = defineProps({

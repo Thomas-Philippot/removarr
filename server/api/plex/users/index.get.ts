@@ -1,4 +1,4 @@
-import { getSettings } from "~/server/repository/settingRepository";
+import { getSettings } from "~~/server/repository/settingRepository";
 import xml2js from "xml2js";
 
 interface UsersResponse {

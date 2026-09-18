@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "@nuxt/eslint": "^1.9.0",
-    "@nuxt/image": "^2.0.0",
+    "@nuxt/image": "^2.1.0",
     "@nuxtjs/i18n": "^10.2.1",
     "@vite-pwa/nuxt": "^1.1.0",
     "better-sqlite3": "^12.5.0",
@@ -41,7 +41,7 @@
     "@tailwindcss/typography": "^0.5.19",
     "@tailwindcss/vite": "^4.1.18",
     "@types/better-sqlite3": "^7.6.13",
-    "@vite-pwa/assets-generator": "^1.0.2",
+    "@vite-pwa/assets-generator": "^1.0.4",
     "@vue/typescript-plugin": "^3.1.8",
     "daisyui": "^5.5.13",
     "drizzle-kit": "^0.31.8",
